@@ -107,3 +107,5 @@ https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEK
 
 - R3.6.19: acceso CPANEL retirado completamente de la interfaz pública. cpanel.html se mantiene solo para administración interna.
 - R3.6.19: referencias públicas a CPANEL reemplazadas por administración interna/sistema interno.
+
+- R3.6.20: optimización de carga; primer render local inmediato, sync Apps Script en segundo plano, cache y logos WebP.

@@ -4,15 +4,16 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>CPANEL | SERVICIOS INFORMÁTICOS AS</title>
   <link rel="icon" type="image/png" href="favicon.png"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="preload" as="image" href="logo-as-icon.webp">
   <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="cpanel.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
 </head>
 <body class="admin-body">
 <div class="admin-shell" id="adminShell">
   <aside class="admin-sidebar" id="adminSidebar">
-    <div class="admin-brand admin-brand-single"><img id="adminLogo" src="logo-as-icon.png" alt="SERVICIOS INFORMÁTICOS AS"><span>CPANEL</span></div>
+    <div class="admin-brand admin-brand-single"><img id="adminLogo" src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="SERVICIOS INFORMÁTICOS AS"><span>CPANEL</span></div>
     <nav class="admin-nav">
       <button class="active" data-view="dashboard"><i class="bi bi-grid"></i> Dashboard</button>
       <button data-view="products"><i class="bi bi-box-seam"></i> Productos</button>

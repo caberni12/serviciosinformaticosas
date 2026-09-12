@@ -9,7 +9,7 @@ const seed = {
     empresa:"SERVICIOS INFORMÁTICOS AS",
     whatsapp:"+56 9 6861 3559",
     instagram:"", facebook:"", tiktok:"", email:"", direccion:"Santiago, Chile",
-    valor_despacho:"0", logo_url:"logo-as-icon.png", assistant_name:"AS Virtual", default_theme:"dark"
+    valor_despacho:"0", logo_url:"logo-as-icon.webp", assistant_name:"AS Virtual", default_theme:"dark"
   },
   categories:[],
   products:[],
@@ -26,21 +26,45 @@ let currentSlide = 0, slideTimer = null;
 let virtualMessages = JSON.parse(localStorage.getItem("asVirtualMessages") || "[]");
 const themeStoreKey = "asServiciosTheme";
 
-async function loadStore(){
+const bootstrapCacheKey = "asServiciosBootstrapCacheV1";
+
+function mergeBootstrap(data){
+  if(!data || typeof data !== "object") return;
+  state.config = {...state.config,...(data.config||{})};
+  if(Array.isArray(data.categories)) state.categories = data.categories;
+  if(Array.isArray(data.products)) state.products = data.products;
+  if(Array.isArray(data.banners) && data.banners.length) state.banners = data.banners;
+}
+
+function loadCachedBootstrap(){
+  try{
+    const cached = JSON.parse(localStorage.getItem(bootstrapCacheKey) || "null");
+    if(cached?.data && Date.now() - Number(cached.ts || 0) < 6 * 60 * 60 * 1000) mergeBootstrap(cached.data);
+  }catch(_){ }
+}
+
+async function syncStoreInBackground(){
+  if(!window.AleAPI?.configured()) return;
+  try{
+    const data = await AleAPI.get("bootstrap");
+    mergeBootstrap(data);
+    try{ localStorage.setItem(bootstrapCacheKey, JSON.stringify({ts:Date.now(),data})); }catch(_){ }
+    const route=(location.hash||"#inicio").slice(1).split("/")[0];
+    if(route==="catalogo" || route==="productos") render();
+  }catch(e){ console.warn("Sincronización remota diferida. Se mantiene el contenido local/cacheado.", e); }
+}
+
+function loadStore(){
   initTheme();
-  if(window.AleAPI?.configured()){
-    try{
-      const data = await AleAPI.get("bootstrap");
-      state.config = {...state.config,...(data.config||{})};
-      state.categories = Array.isArray(data.categories) ? data.categories : [];
-      state.products = Array.isArray(data.products) ? data.products : [];
-      if(Array.isArray(data.banners) && data.banners.length) state.banners = data.banners;
-    }catch(e){ console.warn("API remota no disponible. Se usa contenido local.", e); }
-  }
+  loadCachedBootstrap();
   if(!localStorage.getItem(themeStoreKey) && String(state.config.default_theme || "").toLowerCase() === "light") applyTheme("light");
+  // Primer render inmediato: la red nunca bloquea la aparición de la web.
   render();
   updateCartUI();
   wireGlobalUI();
+  const startSync=()=>syncStoreInBackground();
+  if("requestIdleCallback" in window) requestIdleCallback(startSync,{timeout:700});
+  else setTimeout(startSync,120);
 }
 
 function icon(name){ return `<i class="bi bi-${name}"></i>`; }
@@ -68,7 +92,7 @@ function heroView(){
       </div>
       <div class="hero-brand-visual">
         <div class="logo-energy-ring"></div>
-        <img src="logo-as-full.png" alt="Logo SERVICIOS INFORMÁTICOS AS">
+        <img src="logo-as-full.webp" width="700" height="700" decoding="async" fetchpriority="high" alt="Logo SERVICIOS INFORMÁTICOS AS">
         <div class="floating-chip chip-one">${icon("code-slash")} WEB</div>
         <div class="floating-chip chip-two">${icon("android2")} ANDROID</div>
         <div class="floating-chip chip-three">${icon("database")} POSTGRESQL</div>
@@ -171,7 +195,7 @@ function homeView(){
         <div class="signal-node signal-b"></div>
         <div class="signal-node signal-c"></div>
         <div class="signal-node signal-d"></div>
-        <div class="system-core"><img src="logo-as-icon.png" alt="AS"><span>AS CORE</span></div>
+        <div class="system-core"><img src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="AS"><span>AS CORE</span></div>
         <div class="node node-web">${icon("globe2")}<span>WEB</span></div>
         <div class="node node-mobile">${icon("android2")}<span>ANDROID</span></div>
         <div class="node node-api">${icon("braces")}<span>API</span></div>
@@ -270,7 +294,7 @@ function projectsView(){
 function aboutView(){
   return `<section class="view-hero"><div><span class="eyebrow">NOSOTROS</span><h1>Tecnología práctica, moderna y hecha a tu medida</h1><p>SERVICIOS INFORMÁTICOS AS nace para convertir necesidades reales en herramientas digitales claras, útiles y escalables.</p></div></section>
   <section class="section about-layout">
-    <div class="about-logo"><img src="logo-as-full.png" alt="SERVICIOS INFORMÁTICOS AS"></div>
+    <div class="about-logo"><img src="logo-as-full.webp" loading="lazy" decoding="async" width="700" height="700" alt="SERVICIOS INFORMÁTICOS AS"></div>
     <div class="about-copy"><span class="eyebrow">NUESTRA VISIÓN</span><h2>No desarrollar por desarrollar: construir para resolver.</h2><p>Nos enfocamos en entender el proceso antes de escribir código. Eso permite crear soluciones más simples de usar, más fáciles de mantener y alineadas con el crecimiento de cada cliente.</p><p>Trabajamos con desarrollo Web, Android, sistemas de gestión, PostgreSQL, APIs, automatización y herramientas de análisis.</p><div class="about-values"><span>${icon("check2")} Cercanía</span><span>${icon("check2")} Flexibilidad</span><span>${icon("check2")} Evolución</span><span>${icon("check2")} Resultados</span></div></div>
   </section>${ctaBand()}`;
 }
@@ -322,7 +346,7 @@ function socialIcons(){
 function footer(){
   const c=state.config;
   return `<footer class="site-footer"><div class="footer-glow"></div><div class="footer-inner">
-    <div class="footer-brand"><img src="logo-as-icon.png" alt="AS"><div><strong>SERVICIOS INFORMÁTICOS AS</strong><p>Ideas · Desarrollo · Soporte · Resultados</p>${socialIcons()}</div></div>
+    <div class="footer-brand"><img src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="AS"><div><strong>SERVICIOS INFORMÁTICOS AS</strong><p>Ideas · Desarrollo · Soporte · Resultados</p>${socialIcons()}</div></div>
     <div><h4>Servicios</h4><a href="#servicios">Desarrollo Web</a><a href="#servicios">Sistemas de Gestión</a><a href="#servicios">Android & Web</a><a href="#servicios">PostgreSQL</a></div>
     <div><h4>Empresa</h4><a href="#nosotros">Nosotros</a><a href="#soluciones">Soluciones</a><a href="#proyectos">Proyectos</a><a href="#catalogo">Catálogo</a><a href="#politicas">Políticas</a></div>
     <div><h4>Contacto</h4><a href="#solicitud">Cotizar proyecto</a><button onclick="openWhatsApp()">WhatsApp</button><span>${esc(c.email||"")}</span><span>${esc(c.direccion||"")}</span></div>
@@ -493,11 +517,11 @@ function ensureVirtualAssistant(){
 function virtualAssistantTemplate(){
   return `<section class="virtual-assistant" id="virtualAssistant">
     <button class="virtual-toggle" id="virtualToggle" aria-label="Abrir AS Virtual" title="${esc(state.config.assistant_name || 'AS Virtual')}">
-      <img src="logo-as-icon.png" alt="${esc(state.config.assistant_name || 'AS Virtual')}">
+      <img src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="${esc(state.config.assistant_name || 'AS Virtual')}">
     </button>
     <div class="virtual-panel">
       <div class="virtual-head">
-        <div class="virtual-head-brand"><img src="logo-as-icon.png" alt="AS"><div><small>Asistente inteligente</small><strong>${esc(state.config.assistant_name || 'AS Virtual')}</strong></div></div>
+        <div class="virtual-head-brand"><img src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="AS"><div><small>Asistente inteligente</small><strong>${esc(state.config.assistant_name || 'AS Virtual')}</strong></div></div>
         <div class="virtual-head-actions">
           <button id="virtualClear" aria-label="Limpiar chat" title="Limpiar chat">${icon('trash3')}</button>
           <button id="virtualClose" aria-label="Cerrar chat" title="Cerrar">${icon('x-lg')}</button>
@@ -635,7 +659,13 @@ function showRequestFeedback(type,title,message){
 }
 
 function toast(msg){let t=$(".toast");if(!t){t=document.createElement("div");t.className="toast";document.body.appendChild(t)}t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
-function hideSplash(){const s=$("#splashScreen");if(!s)return;s.classList.add("hide");setTimeout(()=>s.remove(),700)}
+function hideSplash(){const s=$("#splashScreen");if(!s)return;s.classList.add("hide");setTimeout(()=>s.remove(),260)}
+function scheduleSplashExit(){
+  const seen=sessionStorage.getItem("asServiciosSplashSeen")==="1";
+  if(!seen) sessionStorage.setItem("asServiciosSplashSeen","1");
+  setTimeout(hideSplash,seen?40:360);
+}
 window.addEventListener("hashchange",render);
-window.addEventListener("load",()=>setTimeout(hideSplash,1300));
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",scheduleSplashExit,{once:true});
+else scheduleSplashExit();
 loadStore();

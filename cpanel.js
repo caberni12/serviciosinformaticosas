@@ -55,7 +55,7 @@ async function reload(){
 }
 
 function renderAll(){
-  $("#adminLogo").src=data.config.logo_url||"logo-as-icon.png";
+  $("#adminLogo").src=data.config.logo_url||"logo-as-icon.webp";
   $("#kpiProducts").textContent=data.products.length;
   $("#kpiOrders").textContent=data.orders.filter(x=>String(x.estado).toUpperCase()==="PENDIENTE").length;
   $("#kpiRequests").textContent=data.requests.filter(x=>String(x.estado).toUpperCase()==="NUEVA").length;

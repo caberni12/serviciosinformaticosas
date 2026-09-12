@@ -10,17 +10,20 @@
   <meta property="og:title" content="SERVICIOS INFORMÁTICOS AS">
   <meta property="og:description" content="Ideas, desarrollo, soporte y resultados. Soluciones tecnológicas para empresas y emprendedores.">
   <meta property="og:image" content="logo-as-full.png">
+  <link rel="preload" as="image" href="logo-as-full.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="logo-as-icon.webp">
+  <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"></noscript>
 </head>
 <body>
   <div class="splash-screen" id="splashScreen" aria-live="polite">
     <div class="splash-glow"></div>
     <div class="splash-card">
-      <img class="splash-logo" src="logo-as-icon.png" alt="AS">
+      <img class="splash-logo" src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="AS">
       <div class="splash-kicker">BIENVENIDOS</div>
       <h1>SERVICIOS INFORMÁTICOS AS</h1>
       <p>Ideas · Desarrollo · Soporte · Resultados</p>
@@ -36,7 +39,7 @@
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="#inicio" aria-label="SERVICIOS INFORMÁTICOS AS">
-        <img src="logo-as-icon.png" alt="AS">
+        <img src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="AS">
         <span><strong>SERVICIOS INFORMÁTICOS</strong><small>AS · Soluciones a tu medida</small></span>
       </a>
       <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú"><i class="bi bi-list"></i></button>

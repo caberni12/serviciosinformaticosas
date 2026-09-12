@@ -1,0 +1,7 @@
+R3.6.20 - CARGA RAPIDA
+- Render inmediato sin esperar Google Apps Script.
+- Sincronizacion remota en segundo plano + cache local.
+- Splash reducido y solo visible brevemente en la primera visita.
+- Logos optimizados WebP y PNG.
+- Google Fonts y Bootstrap Icons ya no bloquean el primer render.
+- Web + CPANEL mantienen la misma BD y URL GS de R3.6.19.
