@@ -1,0 +1,10 @@
+SERVICIOS INFORMÁTICOS AS · PUBLICACIÓN EN GITHUB PAGES
+
+El ZIP viene plano: index.html está en la raíz.
+
+1. Crea o abre tu repositorio.
+2. Sube TODO el contenido del ZIP a la raíz, sin crear una carpeta adicional.
+3. En Settings > Pages selecciona la rama y /root.
+4. Publica.
+
+Antes de conectar el CPANEL puedes probar la web directamente: funciona con contenido corporativo local y catálogo vacío.

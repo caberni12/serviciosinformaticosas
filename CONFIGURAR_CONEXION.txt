@@ -1,0 +1,6 @@
+1) Ejecuta Setup.gs -> instalarServiciosAS()
+2) Despliega Code.gs como Web App.
+3) Copia la URL que termina en /exec.
+4) Abre config.js.
+5) Reemplaza PEGA_AQUI_LA_URL_DEL_WEB_APP_DE_APPS_SCRIPT por tu URL.
+6) Publica nuevamente los archivos en GitHub Pages.

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CPANEL | SERVICIOS INFORMÁTICOS AS</title>
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="cpanel.css">
+</head>
+<body class="admin-body">
+<div class="login-screen" id="loginScreen">
+  <form class="login-card" id="loginForm">
+    <img src="logo-as-icon.png" alt="SERVICIOS INFORMÁTICOS AS">
+    <span class="eyebrow">Administración</span><h1>CPANEL</h1>
+    <p id="connectionText">Conecta y administra la web, catálogo y solicitudes.</p>
+    <input id="adminPassword" type="password" placeholder="Contraseña de administración" autocomplete="current-password">
+    <button class="btn btn-primary btn-block" type="submit">Ingresar</button>
+    <div class="api-warning" id="apiWarning"></div>
+  </form>
+</div>
+
+<div class="admin-shell hidden" id="adminShell">
+  <aside class="admin-sidebar">
+    <div class="admin-brand admin-brand-single"><img id="adminLogo" src="logo-as-icon.png" alt="SERVICIOS INFORMÁTICOS AS"><span>CPANEL</span></div>
+    <nav class="admin-nav">
+      <button class="active" data-view="dashboard"><i class="bi bi-grid"></i> Dashboard</button>
+      <button data-view="products"><i class="bi bi-box-seam"></i> Productos</button>
+      <button data-view="categories"><i class="bi bi-tags"></i> Categorías</button>
+      <button data-view="banners"><i class="bi bi-images"></i> Carrusel</button>
+      <button data-view="orders"><i class="bi bi-bag-check"></i> Pedidos</button>
+      <button data-view="requests"><i class="bi bi-clipboard-data"></i> Solicitudes</button>
+      <button data-view="virtual"><i class="bi bi-robot"></i> AS Virtual</button>
+      <button data-view="settings"><i class="bi bi-gear"></i> Configuración</button>
+    </nav>
+    <div class="sidebar-bottom"><a href="index.html" class="btn btn-light btn-block"><i class="bi bi-globe2"></i> Ver web</a><button id="logoutBtn" class="btn btn-dark btn-block"><i class="bi bi-box-arrow-right"></i> Salir</button></div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-top"><div><span class="eyebrow">SERVICIOS INFORMÁTICOS AS</span><h1 id="viewTitle">Dashboard</h1></div><div class="admin-top-actions"><div class="admin-theme-switch" id="adminThemeToggle"><button type="button" data-admin-theme="dark"><i class="bi bi-moon-stars"></i><span>Oscuro</span></button><button type="button" data-admin-theme="light"><i class="bi bi-sun"></i><span>Claro</span></button></div><div class="online-pill"><span></span> Conectado</div></div></header>
+
+    <section class="admin-view active" id="view-dashboard">
+      <div class="kpi-grid"><div class="kpi-card"><span>Productos</span><strong id="kpiProducts">0</strong></div><div class="kpi-card"><span>Pedidos pendientes</span><strong id="kpiOrders">0</strong></div><div class="kpi-card"><span>Solicitudes nuevas</span><strong id="kpiRequests">0</strong></div><div class="kpi-card"><span>Stock total</span><strong id="kpiStock">0</strong></div></div>
+      <div class="admin-card"><h2>Resumen</h2><div id="dashboardSummary" class="summary-list"></div></div>
+    </section>
+
+    <section class="admin-view" id="view-products">
+      <div class="admin-card"><div class="card-head"><div><span class="eyebrow">Catálogo</span><h2>Productos</h2></div><button class="btn btn-primary" id="newProduct">+ Nuevo producto</button></div>
+        <div class="editor hidden" id="productEditor"><input type="hidden" id="pId"><input type="hidden" id="pImageId"><input type="hidden" id="pImageUrl">
+          <div class="form-grid"><input id="pName" placeholder="Nombre"><input id="pPrice" type="number" placeholder="Precio"><select id="pCategory"></select><input id="pStock" type="number" placeholder="Stock"><input id="pOccasion" placeholder="Ocasión"><label class="file-field">Foto<input id="pImage" type="file" accept="image/*"></label><textarea id="pDescription" class="span-2" placeholder="Descripción"></textarea></div>
+          <label class="check"><input id="pFeatured" type="checkbox"> Mostrar como destacado</label>
+          <div class="editor-actions"><button class="btn btn-primary" id="saveProduct">Guardar</button><button class="btn btn-light" data-cancel="productEditor">Cancelar</button></div>
+        </div>
+        <div class="admin-toolbar"><input id="productSearch" placeholder="Buscar producto..."><select id="productFilter"><option value="">Todas las categorías</option></select></div>
+        <div class="table-wrap" id="productsTable"></div>
+      </div>
+    </section>
+
+    <section class="admin-view" id="view-categories">
+      <div class="admin-card"><div class="card-head"><div><span class="eyebrow">Organización</span><h2>Categorías</h2></div><button class="btn btn-primary" id="newCategory">+ Nueva categoría</button></div>
+        <div class="editor hidden" id="categoryEditor"><input type="hidden" id="cId"><input type="hidden" id="cImageId"><input type="hidden" id="cImageUrl"><div class="form-grid"><input id="cName" placeholder="Nombre"><input id="cOrder" type="number" placeholder="Orden"><label class="file-field span-2">Imagen<input id="cImage" type="file" accept="image/*"></label><textarea id="cDescription" class="span-2" placeholder="Descripción"></textarea></div><div class="editor-actions"><button class="btn btn-primary" id="saveCategory">Guardar</button><button class="btn btn-light" data-cancel="categoryEditor">Cancelar</button></div></div>
+        <div class="table-wrap" id="categoriesTable"></div>
+      </div>
+    </section>
+
+    <section class="admin-view" id="view-banners">
+      <div class="admin-card"><div class="card-head"><div><span class="eyebrow">Portada</span><h2>Carrusel</h2></div><button class="btn btn-primary" id="newBanner">+ Nuevo banner</button></div>
+        <div class="editor hidden" id="bannerEditor"><input type="hidden" id="bId"><input type="hidden" id="bImageId"><input type="hidden" id="bImageUrl"><div class="form-grid"><input id="bTitle" placeholder="Título"><input id="bSubtitle" placeholder="Subtítulo"><input id="bCta" placeholder="Texto botón"><input id="bLink" placeholder="#solicitud"><input id="bOrder" type="number" placeholder="Orden"><label class="file-field">Imagen<input id="bImage" type="file" accept="image/*"></label></div><div class="editor-actions"><button class="btn btn-primary" id="saveBanner">Guardar</button><button class="btn btn-light" data-cancel="bannerEditor">Cancelar</button></div></div>
+        <div class="table-wrap" id="bannersTable"></div>
+      </div>
+    </section>
+
+    <section class="admin-view" id="view-orders"><div class="admin-card"><span class="eyebrow">Catálogo</span><h2>Pedidos</h2><div class="table-wrap" id="ordersTable"></div></div></section>
+    <section class="admin-view" id="view-requests"><div class="admin-card"><span class="eyebrow">Cotizaciones</span><h2>Solicitudes</h2><div class="table-wrap" id="requestsTable"></div></div></section>
+    <section class="admin-view" id="view-virtual"><div class="admin-card"><div class="card-head"><div><span class="eyebrow">AS VIRTUAL</span><h2>Mensajes del chatbox</h2></div></div><div class="virtual-admin-kpis" id="virtualKpis"></div><div class="admin-toolbar virtual-toolbar"><input id="virtualSearch" placeholder="Buscar por nombre, contacto o mensaje..."><select id="virtualFilter"><option value="">Todos los estados</option><option>NUEVO</option><option>EN_PROCESO</option><option>CONTACTADO</option><option>CERRADO</option></select></div><div id="virtualTable"></div></div></section>
+
+    <section class="admin-view" id="view-settings">
+      <div class="admin-card"><span class="eyebrow">Sitio</span><h2>Configuración</h2>
+        <input type="hidden" id="sLogoId">
+        <div class="form-grid"><input id="sBusiness" placeholder="Nombre / marca"><input id="sWhatsapp" placeholder="WhatsApp"><input id="sEmail" placeholder="Correo"><input id="sAddress" placeholder="Dirección / ubicación"><input id="sAssistantName" placeholder="Nombre del chatbox inteligente"><select id="sDefaultTheme"><option value="dark">Tema web por defecto: Oscuro</option><option value="light">Tema web por defecto: Claro</option></select><input id="sInstagram" placeholder="URL Instagram">
+<input id="sFacebook" placeholder="URL Facebook">
+<input id="sTiktok" placeholder="URL TikTok">
+<div class="span-2" style="font-size:13px;color:#7f6a62;margin-top:-2px">
+  Los iconos de Instagram, Facebook y TikTok siempre se muestran en la web. Al guardar aquí las URLs reales, quedarán enlazados automáticamente.
+</div><input id="sDelivery" type="number" placeholder="Valor despacho"><label class="file-field span-2">Logo<input id="sLogo" type="file" accept="image/*"></label></div>
+        <button class="btn btn-primary" id="saveSettings">Guardar configuración</button>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="adminToast"></div>
+<script src="config.js"></script><script src="api.js"></script><script src="cpanel.js"></script>
+</body></html>

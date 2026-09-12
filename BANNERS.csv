@@ -1,0 +1,4 @@
+id,titulo,subtitulo,cta_texto,enlace,drive_file_id,image_url,activo,orden
+B001,Creamos tecnología que trabaja para tu negocio,"Páginas web modernas, sistemas de gestión, aplicaciones Android y Web, PostgreSQL e integraciones hechas a tu medida.",Cotizar proyecto,#solicitud,,,SI,1
+B002,Sistemas de gestión pensados para crecer contigo,"Digitalizamos procesos, conectamos datos y construimos herramientas que simplifican la operación diaria de tu empresa.",Ver servicios,#servicios,,,SI,2
+B003,Android + Web + datos en una sola solución,"Arquitecturas modernas con APIs, PostgreSQL, automatización, paneles de control y experiencias responsive.",Conversemos,#solicitud,,,SI,3

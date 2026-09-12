@@ -1,0 +1,3 @@
+PAQUETE 100% PLANO PARA GITHUB
+No existe una carpeta contenedora dentro del ZIP.
+index.html, cpanel.html, CSS, JS, imágenes y archivos Apps Script están en la raíz.
