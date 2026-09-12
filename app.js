@@ -9,7 +9,7 @@ const seed = {
     empresa:"SERVICIOS INFORMÁTICOS AS",
     whatsapp:"+56 9 6861 3559",
     instagram:"", facebook:"", tiktok:"", email:"", direccion:"Santiago, Chile",
-    valor_despacho:"0", logo_url:"logo-as-icon.webp", assistant_name:"AS Virtual", default_theme:"dark"
+    valor_despacho:"0", logo_url:"logo-as-icon.webp", assistant_name:"AS Virtual", default_theme:"light"
   },
   categories:[],
   products:[],
@@ -24,7 +24,7 @@ let state = JSON.parse(JSON.stringify(seed));
 let cart = JSON.parse(localStorage.getItem("asServiciosCart") || "[]");
 let currentSlide = 0, slideTimer = null;
 let virtualMessages = JSON.parse(localStorage.getItem("asVirtualMessages") || "[]");
-const themeStoreKey = "asServiciosTheme";
+const themeStoreKey = "asServiciosThemeV2";
 
 const bootstrapCacheKey = "asServiciosBootstrapCacheV1";
 
@@ -231,13 +231,12 @@ function homeView(){
   <section class="section projects-section" id="proyectos">
     <div class="section-heading split-heading">
       <div><span class="eyebrow">PROYECTOS</span><h2>Soluciones que ya estamos construyendo</h2></div>
-      <p>Este portafolio resume desarrollos reales orientados a operación, control, movilidad, datos y automatización empresarial.</p>
     </div>
     <div class="project-grid">${projectCards()}</div>
   </section>
 
   <section class="section catalog-teaser">
-    <div class="catalog-teaser-copy"><span class="eyebrow">PRÓXIMAMENTE</span><h2>Catálogo tecnológico AS</h2><p>Este espacio está preparado para incorporar servicios técnicos, computadores reacondicionados, licencias y software. Por ahora lo dejamos vacío, tal como solicitaste.</p><a class="btn btn-outline" href="#catalogo">Ver catálogo</a></div>
+    <div class="catalog-teaser-copy"><span class="eyebrow">PRÓXIMAMENTE</span><h2>Catálogo tecnológico AS</h2><a class="btn btn-outline" href="#catalogo">Ver catálogo</a></div>
     <div class="catalog-empty-preview"><div class="empty-icon">${icon("box-seam")}</div><strong>0 publicaciones</strong><span>Administración interna habilitada</span></div>
   </section>
 
@@ -457,7 +456,7 @@ function wireGlobalUI(){
   ensureVirtualAssistant();
 }
 function initTheme(){
-  const saved = localStorage.getItem(themeStoreKey) || state.config.default_theme || "dark";
+  const saved = localStorage.getItem(themeStoreKey) || state.config.default_theme || "light";
   applyTheme(saved === "light" ? "light" : "dark");
 }
 function applyTheme(theme){
@@ -484,7 +483,7 @@ function ensureThemeToggle(){
     btn.dataset.ready='1';
     btn.addEventListener('click',()=>applyTheme(btn.dataset.themeOption));
   });
-  applyTheme(localStorage.getItem(themeStoreKey) || document.body.dataset.theme || 'dark');
+  applyTheme(localStorage.getItem(themeStoreKey) || document.body.dataset.theme || 'light');
 }
 function ensureVirtualAssistant(){
   if(!$("#virtualAssistant")){

@@ -46,8 +46,9 @@
     });
   }
 
-  // Escrituras públicas mediante FORM + IFRAME oculto. Este transporte evita CORS y,
-  // a diferencia de no-cors, permite recibir confirmación real del Apps Script.
+  // Escrituras por FORM + IFRAME oculto con confirmación robusta.
+  // Si postMessage no llega por las redirecciones de Apps Script, el cliente
+  // consulta el estado del request mediante JSONP hasta obtener el resultado.
   function iframePost(action, data = {}) {
     if (!configured()) return Promise.reject(new Error("API_NO_CONFIGURADA"));
     return new Promise((resolve, reject) => {
@@ -77,29 +78,49 @@
       add("envelope", JSON.stringify({action, data, requestId}));
 
       let finished = false;
-      const cleanup = () => {
+      let pollTimer = null;
+      const maxMs = Math.max(20000, Number(cfg().REQUEST_TIMEOUT_MS || 18000) + 12000);
+      const started = Date.now();
+
+      const finish = (err, value) => {
         if (finished) return;
         finished = true;
-        clearTimeout(timer);
+        clearInterval(pollTimer);
+        clearTimeout(hardTimer);
         window.removeEventListener("message", onMessage);
-        setTimeout(() => { iframe.remove(); form.remove(); }, 50);
+        setTimeout(() => { iframe.remove(); form.remove(); }, 80);
+        if (err) reject(err); else resolve(value);
       };
+
+      const handleResult = payload => {
+        if (payload && payload.ok === false) finish(new Error(payload.error || "API_ERROR"));
+        else finish(null, payload || {ok:true});
+      };
+
       const onMessage = event => {
         const msg = event && event.data;
         if (!msg || msg.source !== "SERVICIOS_INFORMATICOS_AS_API" || msg.requestId !== requestId) return;
-        cleanup();
-        if (msg.payload && msg.payload.ok === false) reject(new Error(msg.payload.error || "API_ERROR"));
-        else resolve(msg.payload || {ok:true});
+        handleResult(msg.payload);
       };
-      const timer = setTimeout(() => {
-        cleanup();
-        reject(new Error("API_IFRAME_TIMEOUT"));
-      }, Number(cfg().REQUEST_TIMEOUT_MS || 18000));
 
+      const poll = async () => {
+        if (finished) return;
+        try {
+          const st = await jsonp("requestStatus", {request_id:requestId});
+          if (st && st.pending === false) handleResult(st.result || {ok:true});
+        } catch (_) {
+          // El polling es respaldo: ignoramos errores transitorios y seguimos intentando.
+        }
+        if (!finished && Date.now() - started > maxMs) finish(new Error("API_CONFIRMATION_TIMEOUT"));
+      };
+
+      const hardTimer = setTimeout(() => finish(new Error("API_CONFIRMATION_TIMEOUT")), maxMs + 1500);
       window.addEventListener("message", onMessage);
       document.body.appendChild(iframe);
       document.body.appendChild(form);
       form.submit();
+      setTimeout(poll, 700);
+      pollTimer = setInterval(poll, 1100);
     });
   }
 

@@ -63,7 +63,7 @@ NOVEDADES RÁPIDAS
 
 
 BACKEND GOOGLE APPS SCRIPT CONFIGURADO:
-https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec
+https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hlhASv7Ykhm4s6QHGtklSprbIH01Oug/exec
 
 - R3.6.7: CPANEL con botón hamburguesa, menú lateral deslizable y scroll vertical propio.
 - En escritorio el menú puede contraerse; en tablet/móvil funciona como slider/off-canvas con overlay.
@@ -79,7 +79,7 @@ https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEK
 - Prueba rápida: abre la URL `/exec?action=health` después de desplegar la nueva versión.
 
 - R3.6.10: actualizada la URL oficial del Web App a:
-  https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec
+  https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hlhASv7Ykhm4s6QHGtklSprbIH01Oug/exec
 
 - R3.6.11: transporte Web/CPANEL -> Apps Script reemplazado por FORM + IFRAME con postMessage para evitar CORS y recibir confirmación real.
 - R3.6.11: SOLICITUDES valida que exista la hoja, usa lock, SpreadsheetApp.flush() e ID único.
@@ -109,3 +109,14 @@ https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEK
 - R3.6.19: referencias públicas a CPANEL reemplazadas por administración interna/sistema interno.
 
 - R3.6.20: optimización de carga; primer render local inmediato, sync Apps Script en segundo plano, cache y logos WebP.
+
+- R3.6.21: CPANEL carga adminBootstrap por JSONP/GET, sin depender de iframe.
+- R3.6.21: POST administrativo confirmado por polling requestStatus para evitar timeouts por redirecciones de Apps Script.
+- R3.6.21: indicador real Conectando/Conectado/Sin conexión y botón Reintentar.
+
+- R3.6.23: Dashboard del CPANEL convertido a KPI circulares/radiales; AS Virtual adopta el mismo estilo circular.
+
+- R3.6.24: tema claro activado por defecto en la web y el CPANEL.
+- R3.6.24: tarjetas del catálogo rediseñadas para verse más claras y con mejor contraste en tema blanco.
+
+- R3.6.25: se eliminaron textos explicativos internos del portafolio y del catálogo solicitado por el usuario.

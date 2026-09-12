@@ -2,7 +2,7 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const money=n=>new Intl.NumberFormat("es-CL",{style:"currency",currency:"CLP",maximumFractionDigits:0}).format(Number(n||0));
 let token="", data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],config:{}};
-const adminThemeKey = "asServiciosAdminTheme";
+const adminThemeKey = "asServiciosAdminThemeV2";
 
 const adminMenuStoreKey = "asServiciosAdminMenuCollapsed";
 function isAdminMobile(){ return window.matchMedia("(max-width: 980px)").matches; }
@@ -45,13 +45,25 @@ function applyAdminTheme(theme){
   localStorage.setItem(adminThemeKey, theme);
   $$("[data-admin-theme]").forEach(btn=>btn.classList.toggle("active", btn.dataset.adminTheme === theme));
 }
-function initAdminTheme(){ applyAdminTheme(localStorage.getItem(adminThemeKey) || "dark"); }
+function initAdminTheme(){ applyAdminTheme(localStorage.getItem(adminThemeKey) || "light"); }
+
+function setAdminConnection(state,message){
+  const pill=$("#adminConnection"), text=$("#adminConnectionText"), retry=$("#adminRetry");
+  if(!pill) return;
+  pill.classList.remove("is-online","is-offline","is-loading");
+  pill.classList.add(state==="online"?"is-online":state==="offline"?"is-offline":"is-loading");
+  if(text) text.textContent=message || (state==="online"?"Conectado":state==="offline"?"Sin conexión":"Conectando...");
+  retry?.classList.toggle("hidden", state!=="offline");
+}
 
 async function reload(){
-  const r=await AleAPI.post("adminBootstrap",{},token);
+  setAdminConnection("loading","Conectando...");
+  // La lectura del CPANEL usa JSONP/GET para evitar bloqueos CORS/iframe en GitHub Pages.
+  const r=await AleAPI.get("adminBootstrap",{});
   data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],config:{}, ...r};
   data.virtualMessages = Array.isArray(data.virtualMessages) ? data.virtualMessages : [];
   renderAll();
+  setAdminConnection("online","Conectado");
 }
 
 function renderAll(){
@@ -151,8 +163,8 @@ function renderVirtual(){
   }).join('')}</div>`;
 }
 
-function renderSettings(){const c=data.config||{};$("#sLogoId").value=c.logo_drive_file_id||"";$("#sBusiness").value=c.empresa||"";$("#sWhatsapp").value=c.whatsapp||"";$("#sEmail").value=c.email||"";$("#sAddress").value=c.direccion||"";$("#sAssistantName").value=c.assistant_name||"AS Virtual";$("#sDefaultTheme").value=(c.default_theme||"dark").toLowerCase()==="light"?"light":"dark";$("#sInstagram").value=c.instagram||"";$("#sFacebook").value=c.facebook||"";$("#sTiktok").value=c.tiktok||"";$("#sDelivery").value=c.valor_despacho||0}
-$("#saveSettings").addEventListener("click",async()=>{try{let logoId=$("#sLogoId").value;const f=$("#sLogo").files[0];if(f)logoId=(await upload(f,"LOGO")).fileId;await AleAPI.post("saveConfig",{empresa:$("#sBusiness").value.trim(),whatsapp:$("#sWhatsapp").value.trim(),email:$("#sEmail").value.trim(),direccion:$("#sAddress").value.trim(),assistant_name:$("#sAssistantName").value.trim() || "AS Virtual",default_theme:$("#sDefaultTheme").value || "dark",instagram:$("#sInstagram").value.trim(),facebook:$("#sFacebook").value.trim(),tiktok:$("#sTiktok").value.trim(),valor_despacho:$("#sDelivery").value,logo_drive_file_id:logoId},token);toast("Configuración guardada");await reload()}catch(e){toast("No fue posible guardar")}});
+function renderSettings(){const c=data.config||{};$("#sLogoId").value=c.logo_drive_file_id||"";$("#sBusiness").value=c.empresa||"";$("#sWhatsapp").value=c.whatsapp||"";$("#sEmail").value=c.email||"";$("#sAddress").value=c.direccion||"";$("#sAssistantName").value=c.assistant_name||"AS Virtual";$("#sDefaultTheme").value=(c.default_theme||"light").toLowerCase()==="light"?"light":"dark";$("#sInstagram").value=c.instagram||"";$("#sFacebook").value=c.facebook||"";$("#sTiktok").value=c.tiktok||"";$("#sDelivery").value=c.valor_despacho||0}
+$("#saveSettings").addEventListener("click",async()=>{try{let logoId=$("#sLogoId").value;const f=$("#sLogo").files[0];if(f)logoId=(await upload(f,"LOGO")).fileId;await AleAPI.post("saveConfig",{empresa:$("#sBusiness").value.trim(),whatsapp:$("#sWhatsapp").value.trim(),email:$("#sEmail").value.trim(),direccion:$("#sAddress").value.trim(),assistant_name:$("#sAssistantName").value.trim() || "AS Virtual",default_theme:$("#sDefaultTheme").value || "light",instagram:$("#sInstagram").value.trim(),facebook:$("#sFacebook").value.trim(),tiktok:$("#sTiktok").value.trim(),valor_despacho:$("#sDelivery").value,logo_drive_file_id:logoId},token);toast("Configuración guardada");await reload()}catch(e){toast("No fue posible guardar")}});
 
 async function upload(file,kind){if(file.size>6*1024*1024)throw new Error("IMAGEN_MUY_GRANDE");const dataUrl=await AleAPI.fileToDataUrl(file);return AleAPI.post("uploadImage",{kind,fileName:file.name,dataUrl},token)}
 window.removeEntity=async(kind,id)=>{if(!confirm("¿Eliminar este registro?"))return;try{await AleAPI.post("deleteEntity",{kind,id},token);toast("Registro eliminado");await reload()}catch(e){toast("No fue posible eliminar")}};
@@ -169,11 +181,12 @@ $$("[data-cancel]").forEach(b=>b.addEventListener("click",()=>$("#"+b.dataset.ca
 $$(".admin-nav button").forEach(btn=>btn.addEventListener("click",()=>{$$(".admin-nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");$$(".admin-view").forEach(x=>x.classList.remove("active"));$("#view-"+btn.dataset.view).classList.add("active");$("#viewTitle").textContent=btn.textContent.trim();if(isAdminMobile())setAdminMenu(false)}));
 $$("[data-admin-theme]").forEach(btn=>btn.addEventListener("click",()=>applyAdminTheme(btn.dataset.adminTheme)));
 function formatDate(v){if(!v)return"";const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString("es-CL")}
+$("#adminRetry")?.addEventListener("click",async()=>{try{await reload();toast("CPANEL conectado")}catch(e){console.error(e);setAdminConnection("offline","Sin conexión");toast("No fue posible conectar")}});
 (async()=>{
   initAdminTheme();
   initAdminMenu();
   showAdmin();
   if(!AleAPI.configured()){toast("Configura la URL del Web App en config.js");return;}
   try{await reload();}
-  catch(e){console.error(e);toast("No fue posible conectar el CPANEL con la BD");}
+  catch(e){console.error(e);setAdminConnection("offline","Sin conexión");toast("No fue posible conectar el CPANEL con la BD");}
 })();
