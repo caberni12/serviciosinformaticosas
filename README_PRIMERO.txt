@@ -39,3 +39,7 @@ Desde allí podrás administrar catálogo, categorías, carrusel, solicitudes y 
 
 IMPORTANTE
 WhatsApp de información configurado: +56 9 6861 3559. Puedes cambiarlo posteriormente desde CPANEL o CONFIG.
+
+
+BACKEND GOOGLE APPS SCRIPT CONFIGURADO:
+https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec

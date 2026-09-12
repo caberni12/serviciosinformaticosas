@@ -1,0 +1,30 @@
+SERVICIOS INFORMÁTICOS AS - PRUEBA SOLICITUDES R3.6.11
+
+1. En Google Apps Script reemplaza el contenido del único archivo GS por:
+   GOOGLE_APPS_SCRIPT/SERVICIOS_INFORMATICOS_AS.gs
+
+2. Guarda.
+
+3. Ve a IMPLEMENTAR > ADMINISTRAR IMPLEMENTACIONES.
+
+4. Edita la implementación que corresponde a esta URL:
+   https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec
+
+5. En VERSIÓN selecciona NUEVA VERSIÓN y pulsa IMPLEMENTAR.
+   No basta con guardar el GS. La URL /exec ejecuta la última versión publicada.
+
+6. Comprueba en el navegador:
+   https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec?action=health
+
+Debe responder con:
+   "ok": true
+   "database": true
+   "database_id": "1IGS1AerlI9tYLsB5PrM4WIhcm3wfvYMSzwymip6GCNI"
+   "sheet_solicitudes": true
+
+7. Publica los archivos WEB de este ZIP en GitHub Pages.
+
+8. Envía una solicitud desde Solicitar propuesta.
+   Solo mostrará éxito cuando Apps Script confirme la operación.
+
+9. Revisa la pestaña SOLICITUDES de la BD oficial. Debe aparecer una fila SOL-...

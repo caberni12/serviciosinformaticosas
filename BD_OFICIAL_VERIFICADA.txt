@@ -1,0 +1,7 @@
+BD OFICIAL VERIFICADA - SERVICIOS INFORMATICOS AS
+
+Nombre visible: SERVICIOS INFORMATICOS AS
+ID técnico Google Sheets: 1IGS1AerlI9tYLsB5PrM4WIhcm3wfvYMSzwymip6GCNI
+Pestañas: CONFIG, BANNERS, PRODUCTOS, CATEGORIAS, PEDIDOS, SOLICITUDES, AS_VIRTUAL, AUDITORIA
+
+La Web y el único GS validan nombre + ID antes de registrar solicitudes.

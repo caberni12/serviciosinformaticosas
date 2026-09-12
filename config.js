@@ -1,5 +1,4 @@
 window.AS_SERVICIOS_CONFIG = {
-  // Después de desplegar Apps Script como Web App, pega aquí la URL que termina en /exec.
-  API_URL: "PEGA_AQUI_LA_URL_DEL_WEB_APP_DE_APPS_SCRIPT",
+  API_URL: "https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec",
   REQUEST_TIMEOUT_MS: 18000
 };

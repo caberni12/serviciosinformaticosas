@@ -1,0 +1,7 @@
+SERVICIOS INFORMÁTICOS AS · R3.6.19
+
+CAMBIO PRINCIPAL
+- CPANEL ya no aparece como botón/enlace en la web pública.
+- No se muestra la palabra CPANEL en mensajes visibles al visitante.
+- cpanel.html permanece dentro del sistema para acceso administrativo interno.
+- No se modificó la conexión del backend ni la BD.

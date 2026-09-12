@@ -1,0 +1,38 @@
+SERVICIOS INFORMÁTICOS AS - PAQUETE COMPLETO
+Versión Web: R3.6.5 - CPANEL SIN PASS INTERNO
+Conector Google Apps Script: R5 - UN SOLO GS
+BD oficial Google Sheets:
+https://docs.google.com/spreadsheets/d/1IGS1AerlI9tYLsB5PrM4WIhcm3wfvYMSzwymip6GCNI/edit
+
+ESTRUCTURA
+1) Los archivos web están directamente en la raíz para GitHub Pages.
+2) GOOGLE_APPS_SCRIPT contiene SOLO UN archivo .gs:
+   SERVICIOS_INFORMATICOS_AS.gs
+   y el manifiesto técnico appsscript.json.
+3) BD contiene el Excel maestro y los CSV de respaldo/importación.
+
+CONEXIÓN
+1. Abre script.google.com y crea un proyecto.
+2. Crea/usa un único archivo GS y pega el contenido de:
+   GOOGLE_APPS_SCRIPT/SERVICIOS_INFORMATICOS_AS.gs
+3. Usa GOOGLE_APPS_SCRIPT/appsscript.json como manifiesto.
+4. Ejecuta instalarServiciosAS() una sola vez.
+5. Autoriza los permisos.
+6. Implementa > Nueva implementación > Aplicación web.
+   Ejecutar como: tú.
+   Acceso: cualquier usuario.
+7. Copia la URL terminada en /exec.
+8. Abre config.js y reemplaza:
+   https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec
+   por la URL real /exec.
+9. Publica los archivos de la raíz en GitHub Pages.
+
+CPANEL
+- No tiene password interno.
+- Está preparado para usar tu login externo existente como protección.
+
+WHATSAPP DE INFORMACIÓN
++56 9 6861 3559
+
+IMPORTANTE
+No uses los antiguos Code.gs o Setup.gs. Esta entrega trabaja con UN SOLO GS.

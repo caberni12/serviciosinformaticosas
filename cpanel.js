@@ -1,12 +1,45 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const money=n=>new Intl.NumberFormat("es-CL",{style:"currency",currency:"CLP",maximumFractionDigits:0}).format(Number(n||0));
-let token=sessionStorage.getItem("asServiciosAdminToken")||"", data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],config:{}};
+let token="", data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],config:{}};
 const adminThemeKey = "asServiciosAdminTheme";
 
+const adminMenuStoreKey = "asServiciosAdminMenuCollapsed";
+function isAdminMobile(){ return window.matchMedia("(max-width: 980px)").matches; }
+function setAdminMenu(open){
+  const shell=$("#adminShell"), btn=$("#adminMenuToggle"), overlay=$("#adminMenuOverlay");
+  if(!shell) return;
+  if(isAdminMobile()){
+    shell.classList.toggle("menu-open", !!open);
+    document.body.classList.toggle("admin-menu-open", !!open);
+    btn?.setAttribute("aria-expanded", open ? "true" : "false");
+    overlay?.setAttribute("aria-hidden", open ? "false" : "true");
+  } else {
+    const collapsed = open === undefined ? shell.classList.contains("admin-menu-collapsed") : !open;
+    shell.classList.toggle("admin-menu-collapsed", collapsed);
+    localStorage.setItem(adminMenuStoreKey, collapsed ? "1" : "0");
+    btn?.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  }
+}
+function initAdminMenu(){
+  const shell=$("#adminShell"), btn=$("#adminMenuToggle"), overlay=$("#adminMenuOverlay");
+  if(!shell || !btn) return;
+  if(!isAdminMobile() && localStorage.getItem(adminMenuStoreKey)==="1") shell.classList.add("admin-menu-collapsed");
+  btn.setAttribute("aria-expanded", isAdminMobile() ? "false" : (shell.classList.contains("admin-menu-collapsed") ? "false" : "true"));
+  btn.addEventListener("click",()=>{
+    if(isAdminMobile()) setAdminMenu(!shell.classList.contains("menu-open"));
+    else setAdminMenu(shell.classList.contains("admin-menu-collapsed"));
+  });
+  overlay?.addEventListener("click",()=>setAdminMenu(false));
+  window.addEventListener("keydown",e=>{if(e.key==="Escape" && shell.classList.contains("menu-open")) setAdminMenu(false)});
+  window.addEventListener("resize",()=>{
+    if(!isAdminMobile()){ shell.classList.remove("menu-open"); document.body.classList.remove("admin-menu-open"); overlay?.setAttribute("aria-hidden","true"); }
+    btn.setAttribute("aria-expanded", isAdminMobile() ? (shell.classList.contains("menu-open")?"true":"false") : (shell.classList.contains("admin-menu-collapsed")?"false":"true"));
+  });
+}
+
 function toast(msg){const t=$("#adminToast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1900)}
-function showLogin(msg=""){ $("#loginScreen").classList.remove("hidden");$("#adminShell").classList.add("hidden");$("#apiWarning").textContent=msg }
-function showAdmin(){ $("#loginScreen").classList.add("hidden");$("#adminShell").classList.remove("hidden") }
+function showAdmin(){ $("#adminShell")?.classList.remove("hidden") }
 function applyAdminTheme(theme){
   document.body.classList.toggle("theme-light", theme === "light");
   localStorage.setItem(adminThemeKey, theme);
@@ -14,17 +47,12 @@ function applyAdminTheme(theme){
 }
 function initAdminTheme(){ applyAdminTheme(localStorage.getItem(adminThemeKey) || "dark"); }
 
-async function login(password){
-  const r=await AleAPI.post("adminLogin",{password}); token=r.token;sessionStorage.setItem("asServiciosAdminToken",token);await reload();showAdmin();
-}
 async function reload(){
   const r=await AleAPI.post("adminBootstrap",{},token);
   data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],config:{}, ...r};
   data.virtualMessages = Array.isArray(data.virtualMessages) ? data.virtualMessages : [];
   renderAll();
 }
-$("#loginForm").addEventListener("submit",async e=>{e.preventDefault();if(!AleAPI.configured())return showLogin("Configura la URL del Web App en config.js.");try{await login($("#adminPassword").value)}catch(err){showLogin("Contraseña incorrecta o conexión no disponible.")}});
-$("#logoutBtn").addEventListener("click",()=>{sessionStorage.removeItem("asServiciosAdminToken");token="";showLogin()});
 
 function renderAll(){
   $("#adminLogo").src=data.config.logo_url||"logo-as-icon.png";
@@ -138,7 +166,14 @@ window.contactVirtual=(name,contact)=>{
 $("#virtualSearch")?.addEventListener("input",renderVirtual);
 $("#virtualFilter")?.addEventListener("change",renderVirtual);
 $$("[data-cancel]").forEach(b=>b.addEventListener("click",()=>$("#"+b.dataset.cancel).classList.add("hidden")));
-$$(".admin-nav button").forEach(btn=>btn.addEventListener("click",()=>{$$(".admin-nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");$$(".admin-view").forEach(x=>x.classList.remove("active"));$("#view-"+btn.dataset.view).classList.add("active");$("#viewTitle").textContent=btn.textContent.trim()}));
+$$(".admin-nav button").forEach(btn=>btn.addEventListener("click",()=>{$$(".admin-nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");$$(".admin-view").forEach(x=>x.classList.remove("active"));$("#view-"+btn.dataset.view).classList.add("active");$("#viewTitle").textContent=btn.textContent.trim();if(isAdminMobile())setAdminMenu(false)}));
 $$("[data-admin-theme]").forEach(btn=>btn.addEventListener("click",()=>applyAdminTheme(btn.dataset.adminTheme)));
 function formatDate(v){if(!v)return"";const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString("es-CL")}
-(async()=>{initAdminTheme();if(!AleAPI.configured())return showLogin("Configura la URL del Web App en config.js.");if(token){try{await reload();showAdmin();return}catch(e){sessionStorage.removeItem("asServiciosAdminToken");token=""}}showLogin()})();
+(async()=>{
+  initAdminTheme();
+  initAdminMenu();
+  showAdmin();
+  if(!AleAPI.configured()){toast("Configura la URL del Web App en config.js");return;}
+  try{await reload();}
+  catch(e){console.error(e);toast("No fue posible conectar el CPANEL con la BD");}
+})();

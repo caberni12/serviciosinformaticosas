@@ -58,3 +58,52 @@ NOVEDADES RÁPIDAS
 
 - R3.6.4: WhatsApp de información configurado en +56 9 6861 3559 en web, AS Virtual, cotizaciones y configuración base.
 - Si la BD ya estaba instalada, ejecutar `actualizarWhatsappInformacion()` una sola vez en Apps Script o cambiarlo desde CPANEL.
+
+- R3.6.5: CPANEL sin contraseña interna. El acceso queda delegado al login externo del propietario.
+
+
+BACKEND GOOGLE APPS SCRIPT CONFIGURADO:
+https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec
+
+- R3.6.7: CPANEL con botón hamburguesa, menú lateral deslizable y scroll vertical propio.
+- En escritorio el menú puede contraerse; en tablet/móvil funciona como slider/off-canvas con overlay.
+
+- R3.6.8: el formulario Solicitar propuesta guarda exclusivamente en SOLICITUDES/CPANEL; ya no abre WhatsApp automáticamente.
+- R3.6.8: si la API falla, conserva el formulario y muestra error para reintentar.
+
+## R3.6.9 - SOLICITUDES / BD
+- El formulario de cotización usa `AleAPI.submitPublic()` por JSONP para evitar CORS desde GitHub Pages.
+- `doGet` acepta `createRequest`, `createVirtualMessage`, `createOrder` y `health`.
+- `db_()` usa directamente la BD oficial como respaldo aunque no exista la propiedad `SHEET_ID`.
+- Para que una URL `/exec` ya publicada tome este código, es obligatorio crear **Nueva versión** desde Administrar implementaciones.
+- Prueba rápida: abre la URL `/exec?action=health` después de desplegar la nueva versión.
+
+- R3.6.10: actualizada la URL oficial del Web App a:
+  https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec
+
+- R3.6.11: transporte Web/CPANEL -> Apps Script reemplazado por FORM + IFRAME con postMessage para evitar CORS y recibir confirmación real.
+- R3.6.11: SOLICITUDES valida que exista la hoja, usa lock, SpreadsheetApp.flush() e ID único.
+- R3.6.11: health informa database_id, existencia de SOLICITUDES y cantidad de registros.
+- IMPORTANTE R3.6.11: después de reemplazar SERVICIOS_INFORMATICOS_AS.gs debes editar la implementación existente, elegir NUEVA VERSIÓN e implementar. Si editas la implementación existente, conserva la misma URL /exec configurada en config.js.
+
+- R3.6.12: Solicitudes públicas cambian a JSONP/GET para evitar API_IFRAME_TIMEOUT en GitHub Pages.
+- R3.6.12: confirmación visual con check verde en éxito y X roja en error.
+
+- R3.6.13: nueva URL oficial de Apps Script integrada en Web y CPANEL.
+
+- R3.6.14: la API ignora SHEET_ID heredados y fuerza siempre la BD oficial 1IGS1AerlI9tYLsB5PrM4WIhcm3wfvYMSzwymip6GCNI.
+- R3.6.14: el check verde solo aparece si Apps Script confirma database_id oficial, fila e ID realmente escrito.
+
+- R3.6.15: la BD oficial se valida por nombre + ID técnico.
+- Nombre oficial verificado: SERVICIOS INFORMATICOS AS
+- ID técnico verificado: 1IGS1AerlI9tYLsB5PrM4WIhcm3wfvYMSzwymip6GCNI
+- El GS detiene la operación si el nombre o el ID no coinciden.
+
+- R3.6.17: nueva URL oficial del Web App integrada.
+- R3.6.17: BD SERVICIOS INFORMATICOS AS verificada por nombre + ID técnico.
+- R3.6.17: copia actual de la BD incluida en el paquete.
+
+- R3.6.18: AS Virtual y WhatsApp quedan alineados por el mismo eje central, con igual diámetro y separación uniforme.
+
+- R3.6.19: acceso CPANEL retirado completamente de la interfaz pública. cpanel.html se mantiene solo para administración interna.
+- R3.6.19: referencias públicas a CPANEL reemplazadas por administración interna/sistema interno.

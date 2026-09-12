@@ -214,7 +214,7 @@ function homeView(){
 
   <section class="section catalog-teaser">
     <div class="catalog-teaser-copy"><span class="eyebrow">PRÓXIMAMENTE</span><h2>Catálogo tecnológico AS</h2><p>Este espacio está preparado para incorporar servicios técnicos, computadores reacondicionados, licencias y software. Por ahora lo dejamos vacío, tal como solicitaste.</p><a class="btn btn-outline" href="#catalogo">Ver catálogo</a></div>
-    <div class="catalog-empty-preview"><div class="empty-icon">${icon("box-seam")}</div><strong>0 publicaciones</strong><span>Listo para cargar desde CPANEL</span></div>
+    <div class="catalog-empty-preview"><div class="empty-icon">${icon("box-seam")}</div><strong>0 publicaciones</strong><span>Administración interna habilitada</span></div>
   </section>
 
   <section class="section final-cta">
@@ -254,7 +254,7 @@ function catalogView(filter="todos"){
   return `<section class="view-hero compact"><div><span class="eyebrow">CATÁLOGO</span><h1>Productos & soluciones</h1><p>Espacio preparado para futuras publicaciones de hardware, software y servicios técnicos.</p></div></section>
   <section class="section catalog-section">
     ${categories.length?`<div class="category-filter"><a href="#catalogo" class="${filter==="todos"?"active":""}">Todos</a>${categories.map(c=>`<a href="#catalogo/${slug(c.nombre)}" class="${slug(c.nombre)===filter?"active":""}">${esc(c.nombre)}</a>`).join("")}</div>`:""}
-    ${selected.length?`<div class="product-grid">${selected.map(productCard).join("")}</div>`:`<div class="empty-catalog"><div class="empty-catalog-orbit"><i class="bi bi-box-seam"></i></div><span class="eyebrow">CATÁLOGO VACÍO</span><h2>Aquí cargaremos las próximas soluciones AS</h2><p>Computadores reacondicionados, software, servicios técnicos y otros productos aparecerán aquí cuando los publiques desde CPANEL.</p><a class="btn btn-primary" href="#solicitud">Solicitar información</a></div>`}
+    ${selected.length?`<div class="product-grid">${selected.map(productCard).join("")}</div>`:`<div class="empty-catalog"><div class="empty-catalog-orbit"><i class="bi bi-box-seam"></i></div><span class="eyebrow">CATÁLOGO VACÍO</span><h2>Aquí cargaremos las próximas soluciones AS</h2><p>Computadores reacondicionados, software, servicios técnicos y otros productos aparecerán aquí cuando sean publicados desde la administración interna.</p><a class="btn btn-primary" href="#solicitud">Solicitar información</a></div>`}
   </section>`;
 }
 
@@ -280,8 +280,8 @@ function requestView(){
   <section class="section request-layout">
     <div class="request-info"><span class="eyebrow">CONTACTO</span><h2>SERVICIOS INFORMÁTICOS AS</h2><p>Podemos ayudarte a crear un proyecto desde cero, modernizar uno existente o integrar distintos sistemas.</p>
       <div class="contact-stack">
-        <button onclick="openWhatsApp()">${icon("whatsapp")}<span><strong>WhatsApp</strong><small>${esc(state.config.whatsapp||"Configurable desde CPANEL")}</small></span>${icon("arrow-up-right")}</button>
-        <div>${icon("envelope")}<span><strong>Correo</strong><small>${esc(state.config.email||"Configurable desde CPANEL")}</small></span></div>
+        <button onclick="openWhatsApp()">${icon("whatsapp")}<span><strong>WhatsApp</strong><small>${esc(state.config.whatsapp||"Configurable internamente")}</small></span>${icon("arrow-up-right")}</button>
+        <div>${icon("envelope")}<span><strong>Correo</strong><small>${esc(state.config.email||"Configurable internamente")}</small></span></div>
         <div>${icon("geo-alt")}<span><strong>Ubicación</strong><small>${esc(state.config.direccion||"Santiago, Chile")}</small></span></div>
       </div>
     </div>
@@ -297,7 +297,7 @@ function requestView(){
         <textarea id="rqDetail" class="span-2" placeholder="Cuéntanos qué necesitas, quién lo usará y qué problema quieres resolver" required></textarea>
       </div>
       <button class="btn btn-primary btn-block" type="submit">Enviar solicitud ${icon("send")}</button>
-      <small class="form-note">La solicitud puede enviarse a Google Apps Script y también abrir WhatsApp para continuar la conversación.</small>
+      <small class="form-note">La solicitud se registra directamente en el sistema y queda disponible para administración interna. WhatsApp es un canal de contacto independiente.</small>
     </form>
   </section>`;
 }
@@ -326,7 +326,7 @@ function footer(){
     <div><h4>Servicios</h4><a href="#servicios">Desarrollo Web</a><a href="#servicios">Sistemas de Gestión</a><a href="#servicios">Android & Web</a><a href="#servicios">PostgreSQL</a></div>
     <div><h4>Empresa</h4><a href="#nosotros">Nosotros</a><a href="#soluciones">Soluciones</a><a href="#proyectos">Proyectos</a><a href="#catalogo">Catálogo</a><a href="#politicas">Políticas</a></div>
     <div><h4>Contacto</h4><a href="#solicitud">Cotizar proyecto</a><button onclick="openWhatsApp()">WhatsApp</button><span>${esc(c.email||"")}</span><span>${esc(c.direccion||"")}</span></div>
-  </div><div class="footer-bottom"><span>© 2026 SERVICIOS INFORMÁTICOS AS</span><a href="cpanel.html">CPANEL</a></div></footer>`;
+  </div><div class="footer-bottom"><span>© 2026 SERVICIOS INFORMÁTICOS AS</span></div></footer>`;
 }
 
 function render(){
@@ -362,11 +362,38 @@ function wireCarousel(){
 function wireRequest(){
   $("#requestForm")?.addEventListener("submit",async e=>{
     e.preventDefault();
+    const form=e.currentTarget;
     const data={nombre:$("#rqName").value.trim(),telefono:$("#rqPhone").value.trim(),email:$("#rqEmail").value.trim(),fecha_evento:$("#rqDate").value,tipo:$("#rqType").value,cantidad:$("#rqBudget").value||"Proyecto",detalle:$("#rqDetail").value.trim(),estado:"NUEVA"};
-    const btn=e.currentTarget.querySelector('button[type="submit"]'); const old=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Enviando...';
-    try{ if(AleAPI.configured()) await AleAPI.post("createRequest",data); toast("Solicitud registrada correctamente"); }catch(err){ console.warn(err); toast("Abriremos WhatsApp para continuar"); }
-    btn.disabled=false; btn.innerHTML=old;
-    openWhatsApp(`Hola SERVICIOS INFORMÁTICOS AS, quiero cotizar un proyecto.\n\nNombre/Empresa: ${data.nombre}\nWhatsApp: ${data.telefono}\nTipo: ${data.tipo}\nEtapa: ${data.cantidad}\nDetalle: ${data.detalle}`);
+    const btn=form.querySelector('button[type="submit"]');
+    const old=btn.innerHTML;
+    btn.disabled=true;
+    btn.innerHTML='<span class="spinner"></span> Enviando al sistema...';
+    try{
+      if(!AleAPI.configured()) throw new Error("API_NO_CONFIGURADA");
+      const result=await AleAPI.submitPublic("createRequest",data);
+      const expectedDb="1IGS1AerlI9tYLsB5PrM4WIhcm3wfvYMSzwymip6GCNI";
+      if(!result?.verified || result?.database_id!==expectedDb || !result?.row) {
+        throw new Error(`CONFIRMACION_BD_INVALIDA:${result?.database_id||"SIN_BD"}`);
+      }
+      btn.innerHTML=`${icon("check-circle-fill")} Solicitud enviada`;
+      showRequestFeedback(
+        "success",
+        "Solicitud enviada correctamente",
+        `Registro ${result.id} guardado y verificado en SOLICITUDES, fila ${result.row}.`
+      );
+      form.reset();
+      setTimeout(()=>{ btn.disabled=false; btn.innerHTML=old; },1600);
+    }catch(err){
+      console.warn("No fue posible registrar la solicitud",err);
+      btn.disabled=false;
+      btn.innerHTML=old;
+      const code = String(err?.message || "ERROR_DESCONOCIDO");
+      showRequestFeedback(
+        "error",
+        "No se pudo enviar la solicitud",
+        `La solicitud no fue registrada. Código: ${code}. Revisa la conexión y vuelve a intentarlo.`
+      );
+    }
   });
 }
 
@@ -561,7 +588,7 @@ async function handoffToAdmin(){
   if(!name || !contact){ toast('Completa nombre y contacto'); return; }
   const transcript=virtualMessages.slice(-10).map(m=>`${m.role === 'user' ? 'Cliente' : (state.config.assistant_name || 'AS Virtual')}: ${m.text}`).join('\n');
   try{
-    if(AleAPI.configured()) await AleAPI.post('createVirtualMessage',{nombre:name,contacto:contact,mensaje:transcript,canal:'WEB',origen:'AS Virtual'});
+    if(AleAPI.configured()) await AleAPI.submitPublic('createVirtualMessage',{nombre:name,contacto:contact,mensaje:transcript,canal:'WEB',origen:'AS Virtual'});
     toast('Mensaje derivado a administración');
     $("#virtualContactPanel")?.classList.remove('show');
   }catch(err){
@@ -582,6 +609,31 @@ function openModal(id){ $(id)?.classList.add("show"); }
 function closeModal(){ $$(".modal").forEach(x=>x.classList.remove("show")); }
 function normalizePhone(v){return String(v||"").replace(/\D/g,"")}
 window.openWhatsApp=(custom="")=>{const phone=normalizePhone(state.config.whatsapp)||"56968613559";const msg=custom||"Hola SERVICIOS INFORMÁTICOS AS, quisiera información sobre sus servicios.";window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,"_blank")};
+
+function showRequestFeedback(type,title,message){
+  const prev=document.querySelector(".request-feedback-overlay");
+  if(prev) prev.remove();
+  const ok=type==="success";
+  const overlay=document.createElement("div");
+  overlay.className=`request-feedback-overlay ${ok?"is-success":"is-error"}`;
+  overlay.innerHTML=`
+    <div class="request-feedback-card" role="alert" aria-live="assertive">
+      <button class="request-feedback-close" aria-label="Cerrar">${icon("x-lg")}</button>
+      <div class="request-feedback-symbol">${icon(ok?"check-lg":"x-lg")}</div>
+      <strong>${esc(title)}</strong>
+      <p>${esc(message)}</p>
+    </div>`;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>overlay.classList.add("show"));
+  const close=()=>{
+    overlay.classList.remove("show");
+    setTimeout(()=>overlay.remove(),220);
+  };
+  overlay.querySelector(".request-feedback-close")?.addEventListener("click",close);
+  overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
+  setTimeout(close, ok?4200:6200);
+}
+
 function toast(msg){let t=$(".toast");if(!t){t=document.createElement("div");t.className="toast";document.body.appendChild(t)}t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
 function hideSplash(){const s=$("#splashScreen");if(!s)return;s.classList.add("hide");setTimeout(()=>s.remove(),700)}
 window.addEventListener("hashchange",render);

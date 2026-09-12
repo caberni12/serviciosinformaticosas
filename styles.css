@@ -861,3 +861,76 @@ body.theme-light .whatsapp-float::after{
   .virtual-panel{width:calc(100vw - 24px);height:min(70vh,520px);border-radius:20px}
   .virtual-contact.show{grid-template-columns:1fr}
 }
+
+
+/* R3.6.12 - confirmación visual de solicitudes */
+.request-feedback-overlay{
+  position:fixed;inset:0;z-index:1200;display:grid;place-items:center;
+  padding:20px;background:rgba(2,8,15,.58);backdrop-filter:blur(7px);
+  opacity:0;visibility:hidden;transition:.22s ease;
+}
+.request-feedback-overlay.show{opacity:1;visibility:visible}
+.request-feedback-card{
+  position:relative;width:min(430px,94vw);padding:34px 26px 28px;text-align:center;
+  border-radius:24px;background:#071522;border:1px solid var(--line);
+  box-shadow:0 28px 90px rgba(0,0,0,.42);transform:translateY(14px) scale(.97);
+  transition:.22s ease;
+}
+.request-feedback-overlay.show .request-feedback-card{transform:none}
+.request-feedback-symbol{
+  width:78px;height:78px;margin:0 auto 20px;border-radius:50%;
+  display:grid;place-items:center;font-size:38px;font-weight:900;
+}
+.request-feedback-card>strong{display:block;font:700 19px Orbitron,sans-serif;color:#f4f9ff}
+.request-feedback-card p{margin:12px 0 0;color:#9eb4c8;font-size:13px;line-height:1.65}
+.request-feedback-close{
+  position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:10px;
+  border:1px solid var(--line);background:rgba(255,255,255,.035);color:#b9cfe2;
+}
+.request-feedback-overlay.is-success .request-feedback-card{border-color:rgba(29,210,116,.34)}
+.request-feedback-overlay.is-success .request-feedback-symbol{
+  color:#062313;background:#25d77d;box-shadow:0 0 0 9px rgba(37,215,125,.10),0 0 36px rgba(37,215,125,.30);
+}
+.request-feedback-overlay.is-error .request-feedback-card{border-color:rgba(255,80,98,.38)}
+.request-feedback-overlay.is-error .request-feedback-symbol{
+  color:#2b070c;background:#ff5365;box-shadow:0 0 0 9px rgba(255,83,101,.10),0 0 36px rgba(255,83,101,.28);
+}
+body.theme-light .request-feedback-overlay{background:rgba(220,233,244,.68)}
+body.theme-light .request-feedback-card{background:#fff;border-color:rgba(15,72,120,.15);box-shadow:0 28px 80px rgba(13,52,88,.18)}
+body.theme-light .request-feedback-card>strong{color:#08243d}
+body.theme-light .request-feedback-card p{color:#49667f}
+body.theme-light .request-feedback-close{background:#f4f8fc;color:#17334d;border-color:rgba(15,72,120,.14)}
+@media(max-width:560px){
+  .request-feedback-card{padding:30px 18px 24px;border-radius:20px}
+  .request-feedback-symbol{width:70px;height:70px;font-size:34px}
+  .request-feedback-card>strong{font-size:16px}
+}
+
+/* R3.6.18 - floating buttons perfectly aligned on the same vertical axis */
+:root{--float-btn-size:68px;--float-right:18px;--float-gap:14px;--float-bottom:18px}
+.whatsapp-float{
+  width:var(--float-btn-size) !important;
+  height:var(--float-btn-size) !important;
+  right:var(--float-right) !important;
+  bottom:var(--float-bottom) !important;
+  font-size:28px !important;
+}
+.virtual-assistant{
+  right:var(--float-right) !important;
+  left:auto !important;
+  bottom:calc(var(--float-bottom) + var(--float-btn-size) + var(--float-gap)) !important;
+  justify-items:end !important;
+}
+.virtual-assistant #virtualToggle{
+  width:var(--float-btn-size) !important;
+  min-width:var(--float-btn-size) !important;
+  max-width:var(--float-btn-size) !important;
+  height:var(--float-btn-size) !important;
+}
+.virtual-assistant #virtualToggle img{width:52px !important;height:52px !important}
+
+@media(max-width:560px){
+  :root{--float-btn-size:60px;--float-right:14px;--float-gap:12px;--float-bottom:14px}
+  .whatsapp-float{font-size:25px !important}
+  .virtual-assistant #virtualToggle img{width:46px !important;height:46px !important}
+}

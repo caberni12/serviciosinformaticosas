@@ -1,0 +1,19 @@
+SERVICIOS INFORMATICOS AS - R3.6.17 FINAL CORRECTA
+
+Web App oficial:
+https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec
+
+BD oficial:
+SERVICIOS INFORMATICOS AS
+ID: 1IGS1AerlI9tYLsB5PrM4WIhcm3wfvYMSzwymip6GCNI
+
+Incluye:
+- Web completa y responsive
+- CPANEL con hamburguesa, slider y scroll
+- CPANEL sin contraseña interna
+- Un solo archivo GS
+- Solicitudes guardadas en SOLICITUDES
+- Check verde éxito / X roja error
+- AS Virtual
+- WhatsApp +56968613559
+- Copia actual de la BD oficial en /BD

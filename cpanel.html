@@ -10,19 +10,8 @@
   <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="cpanel.css">
 </head>
 <body class="admin-body">
-<div class="login-screen" id="loginScreen">
-  <form class="login-card" id="loginForm">
-    <img src="logo-as-icon.png" alt="SERVICIOS INFORMÁTICOS AS">
-    <span class="eyebrow">Administración</span><h1>CPANEL</h1>
-    <p id="connectionText">Conecta y administra la web, catálogo y solicitudes.</p>
-    <input id="adminPassword" type="password" placeholder="Contraseña de administración" autocomplete="current-password">
-    <button class="btn btn-primary btn-block" type="submit">Ingresar</button>
-    <div class="api-warning" id="apiWarning"></div>
-  </form>
-</div>
-
-<div class="admin-shell hidden" id="adminShell">
-  <aside class="admin-sidebar">
+<div class="admin-shell" id="adminShell">
+  <aside class="admin-sidebar" id="adminSidebar">
     <div class="admin-brand admin-brand-single"><img id="adminLogo" src="logo-as-icon.png" alt="SERVICIOS INFORMÁTICOS AS"><span>CPANEL</span></div>
     <nav class="admin-nav">
       <button class="active" data-view="dashboard"><i class="bi bi-grid"></i> Dashboard</button>
@@ -34,11 +23,11 @@
       <button data-view="virtual"><i class="bi bi-robot"></i> AS Virtual</button>
       <button data-view="settings"><i class="bi bi-gear"></i> Configuración</button>
     </nav>
-    <div class="sidebar-bottom"><a href="index.html" class="btn btn-light btn-block"><i class="bi bi-globe2"></i> Ver web</a><button id="logoutBtn" class="btn btn-dark btn-block"><i class="bi bi-box-arrow-right"></i> Salir</button></div>
+    <div class="sidebar-bottom"><a href="index.html" class="btn btn-light btn-block"><i class="bi bi-globe2"></i> Ver web</a></div>
   </aside>
 
   <main class="admin-main">
-    <header class="admin-top"><div><span class="eyebrow">SERVICIOS INFORMÁTICOS AS</span><h1 id="viewTitle">Dashboard</h1></div><div class="admin-top-actions"><div class="admin-theme-switch" id="adminThemeToggle"><button type="button" data-admin-theme="dark"><i class="bi bi-moon-stars"></i><span>Oscuro</span></button><button type="button" data-admin-theme="light"><i class="bi bi-sun"></i><span>Claro</span></button></div><div class="online-pill"><span></span> Conectado</div></div></header>
+    <header class="admin-top"><div class="admin-top-heading"><button class="admin-menu-toggle" id="adminMenuToggle" type="button" aria-label="Abrir o cerrar menú" aria-controls="adminSidebar" aria-expanded="true"><i class="bi bi-list"></i></button><div><span class="eyebrow">SERVICIOS INFORMÁTICOS AS</span><h1 id="viewTitle">Dashboard</h1></div></div><div class="admin-top-actions"><div class="admin-theme-switch" id="adminThemeToggle"><button type="button" data-admin-theme="dark"><i class="bi bi-moon-stars"></i><span>Oscuro</span></button><button type="button" data-admin-theme="light"><i class="bi bi-sun"></i><span>Claro</span></button></div><div class="online-pill"><span></span> Conectado</div></div></header>
 
     <section class="admin-view active" id="view-dashboard">
       <div class="kpi-grid"><div class="kpi-card"><span>Productos</span><strong id="kpiProducts">0</strong></div><div class="kpi-card"><span>Pedidos pendientes</span><strong id="kpiOrders">0</strong></div><div class="kpi-card"><span>Solicitudes nuevas</span><strong id="kpiRequests">0</strong></div><div class="kpi-card"><span>Stock total</span><strong id="kpiStock">0</strong></div></div>
@@ -89,6 +78,7 @@
     </section>
   </main>
 </div>
+<div class="admin-menu-overlay" id="adminMenuOverlay" aria-hidden="true"></div>
 <div class="toast" id="adminToast"></div>
 <script src="config.js"></script><script src="api.js"></script><script src="cpanel.js"></script>
 </body></html>

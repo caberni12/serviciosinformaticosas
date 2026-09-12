@@ -1,0 +1,11 @@
+PRUEBA DE CONEXION
+
+Abrir:
+https://script.google.com/macros/s/AKfycbwOzRUhDaaMkHpD5Tb-KWozH40ARgQECDJttoIEKN4QNRvzOTc5RC9xU01Lf2sv_Hr-xw/exec?action=health
+
+Debe reportar:
+- ok: true
+- database: true
+- database_id: 1IGS1AerlI9tYLsB5PrM4WIhcm3wfvYMSzwymip6GCNI
+- database_name: SERVICIOS INFORMATICOS AS
+- sheet_solicitudes: true
