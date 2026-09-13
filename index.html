@@ -12,7 +12,7 @@
   <meta property="og:image" content="logo-as-full.png">
   <link rel="preload" as="image" href="logo-as-full.webp" fetchpriority="high">
   <link rel="preload" as="image" href="logo-as-icon.webp">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.min.css?v=3.8.3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -61,6 +61,7 @@
         <a href="#solicitud">Cotizar</a>
       </nav>
       <div class="header-actions">
+        <a class="cpanel-access" href="cpanel.html" aria-label="Acceso al CPANEL" title="Acceso seguro al CPANEL"><i class="bi bi-shield-lock-fill"></i><span>CPANEL</span></a>
         <button class="round-button" id="searchBtn" aria-label="Buscar en catálogo"><i class="bi bi-search"></i></button>
         <button class="cart-button" id="cartBtn" aria-label="Carrito"><i class="bi bi-bag"></i><span id="cartCount">0</span></button>
       </div>
@@ -120,8 +121,8 @@
 
   <a class="whatsapp-float" id="whatsappFloat" href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
 
-  <script src="config.js"></script>
-  <script src="api.js"></script>
-  <script src="app.js"></script>
+  <script src="config.min.js"></script>
+  <script src="api.min.js"></script>
+  <script src="app.min.js"></script>
 </body>
 </html>

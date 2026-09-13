@@ -1,0 +1,9 @@
+SERVICIOS INFORMÁTICOS AS - ARCHIVOS PARA GITHUB PAGES
+
+1. Entre a esta carpeta SUBIR_A_GITHUB.
+2. Seleccione TODOS los archivos que están dentro de esta carpeta.
+3. Súbalos directamente a la RAÍZ del repositorio GitHub.
+4. NO suba la carpeta SUBIR_A_GITHUB como una carpeta contenedora; suba su contenido.
+5. NO suba las carpetas BD ni GOOGLE_APPS_SCRIPT del proyecto completo.
+
+Esta carpeta contiene únicamente la versión pública preparada para GitHub Pages.

@@ -1,0 +1,1 @@
+R3.8.2 - Nueva URL oficial de Apps Script integrada.

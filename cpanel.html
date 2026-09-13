@@ -4,33 +4,65 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>CPANEL | SERVICIOS INFORMÁTICOS AS</title>
   <meta name="theme-color" content="#eef5fb">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <meta name="referrer" content="no-referrer">
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="preload" as="image" href="logo-as-icon.webp">
-  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="cpanel.css">
+  <link rel="stylesheet" href="styles.min.css"><link rel="stylesheet" href="cpanel.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
 </head>
 <body class="admin-body theme-light" data-theme="light">
-<div class="admin-shell" id="adminShell">
+
+<section class="admin-login-screen" id="adminLoginScreen">
+  <div class="admin-login-card">
+    <div class="admin-login-logo"><img src="logo-as-icon.webp" alt="AS"></div>
+    <span class="eyebrow">ACCESO SEGURO</span>
+    <h1>CPANEL</h1>
+    <p>Ingresa con tu usuario autorizado de SERVICIOS INFORMÁTICOS AS.</p>
+    <form id="adminLoginForm" autocomplete="on">
+      <label><span>Usuario o correo</span><input id="adminLoginUser" autocomplete="username" required placeholder="Usuario"></label>
+      <label><span>Contraseña</span><div class="password-field"><input id="adminLoginPassword" type="password" autocomplete="current-password" required placeholder="Contraseña"><button type="button" id="toggleAdminPassword" aria-label="Mostrar u ocultar contraseña"><i class="bi bi-eye"></i></button></div></label>
+      <button class="btn btn-primary btn-block admin-login-button" id="adminLoginButton" type="submit"><i class="bi bi-shield-lock"></i> Ingresar al CPANEL</button>
+    </form>
+    <div class="admin-login-message hidden" id="adminLoginMessage"></div>
+    <small class="admin-login-foot">Sesión protegida · contraseñas cifradas · permisos por usuario</small>
+  </div>
+</section>
+
+<div class="admin-shell hidden" id="adminShell">
   <aside class="admin-sidebar" id="adminSidebar">
     <div class="admin-brand admin-brand-single"><img id="adminLogo" src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="SERVICIOS INFORMÁTICOS AS"><span>CPANEL</span></div>
     <nav class="admin-nav">
-      <button class="active" data-view="dashboard"><i class="bi bi-grid"></i> Dashboard</button>
-      <button data-view="products"><i class="bi bi-box-seam"></i> Productos</button>
-      <button data-view="categories"><i class="bi bi-tags"></i> Categorías</button>
-      <button data-view="banners"><i class="bi bi-images"></i> Carrusel</button>
-      <button data-view="orders"><i class="bi bi-bag-check"></i> Pedidos</button>
-      <button data-view="requests"><i class="bi bi-clipboard-data"></i> Solicitudes</button>
-      <button data-view="virtual"><i class="bi bi-robot"></i> AS Virtual</button>
-      <button data-view="office"><i class="bi bi-building-gear"></i> Oficina Virtual</button>
-      <button data-view="settings"><i class="bi bi-gear"></i> Configuración</button>
+      <button class="active" data-view="dashboard" data-module="dashboard"><i class="bi bi-grid"></i> Dashboard</button>
+      <button data-view="products" data-module="products"><i class="bi bi-box-seam"></i> Productos</button>
+      <button data-view="categories" data-module="categories"><i class="bi bi-tags"></i> Categorías</button>
+      <button data-view="banners" data-module="banners"><i class="bi bi-images"></i> Carrusel</button>
+      <button data-view="orders" data-module="orders"><i class="bi bi-bag-check"></i> Pedidos</button>
+      <button data-view="requests" data-module="requests"><i class="bi bi-clipboard-data"></i> Solicitudes</button>
+      <button data-view="virtual" data-module="virtual"><i class="bi bi-robot"></i> AS Virtual</button>
+      <button data-view="office" data-module="office"><i class="bi bi-building-gear"></i> Oficina Virtual</button>
+      <button data-view="users" data-module="users"><i class="bi bi-people"></i> Usuarios y permisos</button>
+      <button data-view="settings" data-module="settings"><i class="bi bi-gear"></i> Configuración</button>
     </nav>
     <div class="sidebar-bottom"><a href="index.html" class="btn btn-light btn-block"><i class="bi bi-globe2"></i> Ver web</a></div>
   </aside>
 
   <main class="admin-main">
-    <header class="admin-top"><div class="admin-top-heading"><button class="admin-menu-toggle" id="adminMenuToggle" type="button" aria-label="Abrir o cerrar menú" aria-controls="adminSidebar" aria-expanded="true"><i class="bi bi-list"></i></button><div><span class="eyebrow">SERVICIOS INFORMÁTICOS AS</span><h1 id="viewTitle">Dashboard</h1></div></div><div class="admin-top-actions"><div class="admin-theme-switch" id="adminThemeToggle"><button type="button" data-admin-theme="dark"><i class="bi bi-moon-stars"></i><span>Oscuro</span></button><button type="button" data-admin-theme="light"><i class="bi bi-sun"></i><span>Claro</span></button></div><div class="admin-connection-wrap"><div class="online-pill" id="adminConnection"><span></span><b id="adminConnectionText">Conectando...</b></div><button class="admin-retry hidden" id="adminRetry" type="button"><i class="bi bi-arrow-clockwise"></i> Reintentar</button></div></div></header>
+    <header class="admin-top"><div class="admin-top-heading"><button class="admin-menu-toggle" id="adminMenuToggle" type="button" aria-label="Abrir o cerrar menú" aria-controls="adminSidebar" aria-expanded="true"><i class="bi bi-list"></i></button><div><span class="eyebrow">SERVICIOS INFORMÁTICOS AS</span><h1 id="viewTitle">Dashboard</h1></div></div><div class="admin-top-actions"><div class="admin-notification-wrap">
+  <button class="admin-notification-bell" id="adminNotificationBell" type="button" aria-label="Notificaciones" aria-expanded="false">
+    <i class="bi bi-bell"></i><span class="admin-notification-count hidden" id="adminNotificationCount">0</span>
+  </button>
+  <aside class="admin-notification-panel" id="adminNotificationPanel" aria-hidden="true">
+    <div class="notification-panel-head">
+      <div><span class="eyebrow">CENTRO</span><strong>Notificaciones</strong><small id="adminNotificationSyncText">Sincronización automática</small></div>
+      <button type="button" class="notification-refresh" id="adminNotificationSyncNow" title="Sincronizar ahora"><i class="bi bi-arrow-clockwise"></i></button>
+    </div>
+    <div class="notification-panel-actions"><button type="button" id="adminNotificationMarkAll"><i class="bi bi-check2-all"></i> Marcar todas</button><span id="adminNotificationAutoLabel">Auto · 15 s</span></div>
+    <div class="admin-notification-list" id="adminNotificationList"></div>
+  </aside>
+</div><div class="admin-theme-switch" id="adminThemeToggle"><button type="button" data-admin-theme="dark"><i class="bi bi-moon-stars"></i><span>Oscuro</span></button><button type="button" data-admin-theme="light"><i class="bi bi-sun"></i><span>Claro</span></button></div><div class="admin-user-chip"><span class="admin-user-avatar"><i class="bi bi-person-check"></i></span><span><strong id="currentAdminName">Usuario</strong><small id="currentAdminRole">ROL</small></span><button id="adminLogout" type="button" title="Cerrar sesión"><i class="bi bi-box-arrow-right"></i></button></div><div class="admin-connection-wrap"><div class="online-pill" id="adminConnection"><span></span><b id="adminConnectionText">Conectando...</b></div><button class="admin-retry hidden" id="adminRetry" type="button"><i class="bi bi-arrow-clockwise"></i> Reintentar</button></div></div></header>
 
     <section class="admin-view active" id="view-dashboard">
       <div class="kpi-grid circular-kpis">
@@ -116,6 +148,32 @@
       <div class="admin-card"><div class="card-head"><div><span class="eyebrow">HISTORIAL</span><h2>Cotizaciones</h2></div></div><div class="table-wrap" id="quotesTable"></div></div>
     </section>
 
+
+    <section class="admin-view" id="view-users">
+      <div class="admin-card">
+        <div class="card-head"><div><span class="eyebrow">SEGURIDAD</span><h2>Usuarios y permisos</h2><p class="office-intro">Controla quién puede entrar al CPANEL y qué módulos puede ver, editar o eliminar.</p></div><button class="btn btn-primary" id="newAdminUser"><i class="bi bi-person-plus"></i> Nuevo usuario</button></div>
+        <div class="editor hidden user-editor" id="adminUserEditor">
+          <input type="hidden" id="uId">
+          <div class="form-grid">
+            <input id="uName" placeholder="Nombre completo">
+            <input id="uEmail" type="email" placeholder="Correo">
+            <input id="uUsername" placeholder="Usuario de acceso">
+            <select id="uRole"><option value="ADMIN">Administrador</option><option value="GERENCIA">Gerencia</option><option value="OPERADOR">Operador</option><option value="LECTURA">Solo lectura</option></select>
+            <input id="uPassword" type="password" autocomplete="new-password" placeholder="Contraseña (mín. 10 caracteres)">
+            <label class="check user-active-check"><input id="uActive" type="checkbox" checked> Usuario activo</label>
+          </div>
+          <div class="user-password-note"><i class="bi bi-shield-check"></i><span>Las contraseñas se guardan únicamente como hash seguro. Al editar un usuario, deja la contraseña vacía para conservar la actual.</span></div>
+          <div class="permission-editor">
+            <div class="permission-head"><div><strong>Permisos por módulo</strong><small>Ver, editar y eliminar se validan también en el servidor.</small></div><button type="button" class="category-manage-btn" id="applyRolePermissions">Aplicar permisos del rol</button></div>
+            <div class="permission-grid" id="permissionGrid"></div>
+          </div>
+          <div class="editor-actions"><button class="btn btn-primary" id="saveAdminUser"><i class="bi bi-floppy"></i> Guardar usuario</button><button class="btn btn-light" data-cancel="adminUserEditor">Cancelar</button></div>
+        </div>
+        <div class="admin-toolbar"><input id="adminUserSearch" placeholder="Buscar usuario..."><select id="adminUserRoleFilter"><option value="">Todos los roles</option><option>ADMIN</option><option>GERENCIA</option><option>OPERADOR</option><option>LECTURA</option></select></div>
+        <div class="table-wrap" id="adminUsersTable"></div>
+      </div>
+    </section>
+
     <section class="admin-view" id="view-settings">
       <div class="admin-card"><span class="eyebrow">Sitio</span><h2>Configuración</h2>
         <input type="hidden" id="sLogoId">
@@ -145,6 +203,7 @@
   </main>
 </div>
 <div class="admin-menu-overlay" id="adminMenuOverlay" aria-hidden="true"></div>
+<div class="admin-notification-popups" id="adminNotificationPopups" aria-live="polite"></div>
 <div class="toast" id="adminToast"></div>
-<script src="config.js"></script><script src="api.js"></script><script src="cpanel.js"></script>
+<script src="config.min.js"></script><script src="api.min.js"></script><script src="cpanel.min.js"></script>
 </body></html>
