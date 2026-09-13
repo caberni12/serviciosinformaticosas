@@ -1,0 +1,12 @@
+SERVICIOS INFORMÁTICOS AS - R3.9.2
+==================================
+
+MEJORAS CPANEL
+- Miniaturas de Productos clickeables: abren un modal grande para revisar la imagen.
+- Modal responsive, fondo semitransparente, X, cierre exterior y tecla Esc.
+- Nuevo splash global moderno para operaciones del CPANEL.
+- El splash muestra el logo AS al centro, anillos animados, mensaje de la operación y confirmación visual de éxito/error.
+- Se conserva además el loader propio del botón y el mensaje toast de confirmación.
+- El splash se aplica a guardados, eliminaciones, publicación de contenido, cambios de estado, usuarios/permisos, cotizaciones, correo, WhatsApp y configuración.
+- No requiere cambios en Google Apps Script para estas dos mejoras visuales.
+- Carpeta SUBIR_A_GITHUB actualizada.

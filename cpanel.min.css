@@ -548,3 +548,63 @@ body:not(.theme-light) .cms-status-strip small,body:not(.theme-light) .cms-group
 body:not(.theme-light) .cms-group-head{background:rgba(24,151,230,.08)}
 body:not(.theme-light) .cms-field input,body:not(.theme-light) .cms-field textarea{background:rgba(3,15,27,.78);color:#eaf8ff;border-color:rgba(90,205,255,.16)}
 @media(max-width:900px){.cms-status-strip{grid-template-columns:1fr}.cms-fields{grid-template-columns:1fr}.cms-toolbar{grid-template-columns:1fr}.cms-sticky-save{bottom:8px;align-items:stretch;flex-direction:column}.cms-card-actions{width:100%}.cms-card-actions .btn{flex:1}}
+
+/* R3.9.2 - Vista ampliada de productos + splash global moderno */
+.product-thumb-button{
+  position:relative;width:54px;height:54px;padding:0;border:0;background:transparent;border-radius:14px;cursor:zoom-in;display:grid;place-items:center;overflow:visible;
+}
+.product-thumb-button .thumb{width:54px;height:54px;object-fit:cover;border-radius:14px;display:block;transition:transform .22s ease,box-shadow .22s ease}
+.product-thumb-button:hover .thumb{transform:scale(1.06);box-shadow:0 8px 26px rgba(0,196,255,.22)}
+.product-thumb-zoom{position:absolute;right:-5px;bottom:-5px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#0b83c6;color:#fff;border:2px solid #fff;font-size:9px;box-shadow:0 5px 14px rgba(0,0,0,.18);transition:transform .2s ease}
+.product-thumb-button:hover .product-thumb-zoom{transform:scale(1.1)}
+body:not(.theme-light) .product-thumb-zoom{border-color:#071321}
+
+.product-image-modal{position:fixed;inset:0;z-index:10050;background:rgba(2,12,24,.72);backdrop-filter:blur(12px);display:grid;place-items:center;padding:22px;opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}
+.product-image-modal.show{opacity:1;visibility:visible}
+.product-image-modal-card{position:relative;width:min(920px,94vw);max-height:92vh;padding:22px;border-radius:26px;border:1px solid rgba(77,194,255,.22);background:linear-gradient(180deg,rgba(8,26,45,.98),rgba(4,15,28,.98));box-shadow:0 28px 80px rgba(0,0,0,.42);transform:translateY(10px) scale(.985);transition:transform .22s ease;display:grid;gap:14px}
+.product-image-modal.show .product-image-modal-card{transform:translateY(0) scale(1)}
+.product-image-modal-close{position:absolute;right:16px;top:16px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.24);color:#fff;display:grid;place-items:center;cursor:pointer;z-index:2;font-size:16px}
+.product-image-modal-head{padding-right:52px}.product-image-modal-head h3{margin:5px 0 0;font-size:20px}
+.product-image-modal-stage{min-height:280px;max-height:68vh;border-radius:20px;background:radial-gradient(circle at 50% 35%,rgba(20,154,230,.11),transparent 50%),rgba(255,255,255,.035);display:grid;place-items:center;overflow:hidden;padding:18px}
+.product-image-modal-stage img{display:block;max-width:100%;max-height:64vh;width:auto;height:auto;object-fit:contain;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+.product-image-modal-card>small{text-align:center;color:var(--muted);font-size:10px}
+body.theme-light .product-image-modal{background:rgba(18,43,66,.46)}
+body.theme-light .product-image-modal-card{background:linear-gradient(180deg,#fff,#f4f9fd);border-color:rgba(15,72,120,.16);box-shadow:0 28px 80px rgba(26,65,96,.24)}
+body.theme-light .product-image-modal-close{background:#edf6fc;color:#163b5b;border-color:rgba(15,72,120,.12)}
+body.theme-light .product-image-modal-stage{background:linear-gradient(180deg,#f7fbfe,#edf5fb)}
+body.admin-modal-open{overflow:hidden}
+
+.admin-global-splash{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:20px;background:rgba(3,15,28,.66);backdrop-filter:blur(14px);opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}
+.admin-global-splash.show{opacity:1;visibility:visible}
+.admin-global-splash.is-closing{opacity:0}
+.admin-global-splash-panel{width:min(360px,90vw);min-height:320px;border-radius:30px;padding:34px 28px 28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;background:linear-gradient(180deg,rgba(8,29,49,.96),rgba(3,16,29,.98));border:1px solid rgba(57,197,255,.22);box-shadow:0 30px 90px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.05);transform:scale(.96);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.admin-global-splash.show .admin-global-splash-panel{transform:scale(1)}
+.admin-global-splash-orbit{position:relative;width:154px;height:154px;display:grid;place-items:center}
+.admin-global-splash-logo{position:relative;z-index:3;width:86px;height:86px;border-radius:28px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.14);box-shadow:0 15px 42px rgba(0,151,233,.26),inset 0 0 25px rgba(36,199,255,.08)}
+.admin-global-splash-logo img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,204,255,.26))}
+.admin-splash-ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;pointer-events:none}
+.admin-splash-ring.ring-one{border-top-color:#28c8ff;border-right-color:rgba(40,200,255,.2);animation:adminSplashSpin 1.15s linear infinite}
+.admin-splash-ring.ring-two{inset:12px;border-bottom-color:#087fc4;border-left-color:rgba(8,127,196,.18);animation:adminSplashSpinReverse 1.7s linear infinite}
+.admin-splash-ring.ring-three{inset:25px;border-top-color:rgba(86,221,255,.45);animation:adminSplashPulse 1.25s ease-in-out infinite}
+.admin-global-splash-panel>strong{font-size:14px;letter-spacing:.01em;max-width:280px;line-height:1.45;color:#f3fbff}
+.admin-global-splash-panel>small{font-size:9px;letter-spacing:.18em;font-weight:800;color:rgba(177,218,240,.65)}
+.admin-global-splash-status{height:28px;display:flex;align-items:center;justify-content:center;gap:6px;color:#47d99c;font-size:24px}
+.admin-global-splash-status span{width:7px;height:7px;border-radius:50%;background:#33caff;animation:adminSplashDot 1s ease-in-out infinite}
+.admin-global-splash-status span:nth-child(2){animation-delay:.15s}.admin-global-splash-status span:nth-child(3){animation-delay:.3s}
+.admin-global-splash.is-success .admin-global-splash-panel{border-color:rgba(54,221,149,.36);box-shadow:0 30px 90px rgba(0,0,0,.42),0 0 36px rgba(54,221,149,.12)}
+.admin-global-splash.is-success .admin-splash-ring{animation-play-state:paused;border-color:rgba(54,221,149,.24)}
+.admin-global-splash.is-success .admin-global-splash-status{color:#39da96}
+.admin-global-splash.is-error .admin-global-splash-panel{border-color:rgba(255,91,112,.38);box-shadow:0 30px 90px rgba(0,0,0,.42),0 0 36px rgba(255,91,112,.12)}
+.admin-global-splash.is-error .admin-splash-ring{animation-play-state:paused;border-color:rgba(255,91,112,.22)}
+.admin-global-splash.is-error .admin-global-splash-status{color:#ff6477}
+body.theme-light .admin-global-splash{background:rgba(28,60,86,.38)}
+body.theme-light .admin-global-splash-panel{background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(242,249,254,.99));border-color:rgba(15,126,196,.16);box-shadow:0 30px 90px rgba(31,70,100,.24)}
+body.theme-light .admin-global-splash-panel>strong{color:#173b59}body.theme-light .admin-global-splash-panel>small{color:#628199}
+body.theme-light .admin-global-splash-logo{background:linear-gradient(145deg,#fff,#edf7fd);border-color:rgba(17,126,191,.12)}
+body.admin-splash-open{overflow:hidden}
+@keyframes adminSplashSpin{to{transform:rotate(360deg)}}
+@keyframes adminSplashSpinReverse{to{transform:rotate(-360deg)}}
+@keyframes adminSplashPulse{0%,100%{transform:scale(.94);opacity:.45}50%{transform:scale(1.04);opacity:1}}
+@keyframes adminSplashDot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
+@media(max-width:600px){.product-image-modal{padding:12px}.product-image-modal-card{width:100%;padding:18px;border-radius:22px}.product-image-modal-stage{min-height:220px;max-height:70vh;padding:10px}.product-image-modal-stage img{max-height:66vh}.admin-global-splash-panel{min-height:290px;padding:28px 20px}.admin-global-splash-orbit{width:140px;height:140px}.admin-global-splash-logo{width:80px;height:80px}.admin-global-splash-logo img{width:60px;height:60px}}
+@media(prefers-reduced-motion:reduce){.admin-splash-ring,.admin-global-splash-status span{animation:none!important}.admin-global-splash,.admin-global-splash-panel,.product-image-modal,.product-image-modal-card,.product-thumb-button .thumb{transition:none!important}}

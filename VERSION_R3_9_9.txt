@@ -1,0 +1,2 @@
+SERVICIOS INFORMATICOS AS - R3.9.9
+Correccion real del hero principal: telefono frontal recortado a una proporcion mas compacta, menos alto, visualmente mas ancho y mejor alineado con el bloque de texto.
