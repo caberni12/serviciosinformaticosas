@@ -1,0 +1,7 @@
+SERVICIOS INFORMATICOS AS - R3.10.1
+- Footer móvil: SERVICIOS / EMPRESA / CONTACTO en tres columnas lado a lado.
+- CPANEL: cambios reflejados inmediatamente en memoria local.
+- Se elimina adminBootstrap completo después de guardar/editar/eliminar.
+- Reconciliación selectiva del módulo afectado en segundo plano.
+- Notificaciones ya no vuelven a renderizar módulos no visibles cada 15 s.
+- Splash de confirmación más breve para mejorar percepción de velocidad.

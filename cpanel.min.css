@@ -608,3 +608,20 @@ body.admin-splash-open{overflow:hidden}
 @keyframes adminSplashDot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
 @media(max-width:600px){.product-image-modal{padding:12px}.product-image-modal-card{width:100%;padding:18px;border-radius:22px}.product-image-modal-stage{min-height:220px;max-height:70vh;padding:10px}.product-image-modal-stage img{max-height:66vh}.admin-global-splash-panel{min-height:290px;padding:28px 20px}.admin-global-splash-orbit{width:140px;height:140px}.admin-global-splash-logo{width:80px;height:80px}.admin-global-splash-logo img{width:60px;height:60px}}
 @media(prefers-reduced-motion:reduce){.admin-splash-ring,.admin-global-splash-status span{animation:none!important}.admin-global-splash,.admin-global-splash-panel,.product-image-modal,.product-image-modal-card,.product-thumb-button .thumb{transition:none!important}}
+
+
+/* R3.10.0 - SINCRONIZAR SOLO MODULO ABIERTO */
+.admin-module-sync{
+  min-height:42px;padding:0 15px;border-radius:13px;border:1px solid rgba(12,131,215,.20);
+  background:linear-gradient(135deg,#0b7cf3,#00a9d9);color:#fff;display:inline-flex;align-items:center;gap:8px;
+  font:800 10px/1 Inter,sans-serif;letter-spacing:.08em;cursor:pointer;box-shadow:0 10px 28px rgba(11,124,243,.18);
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;white-space:nowrap
+}
+.admin-module-sync:hover{transform:translateY(-1px);box-shadow:0 13px 32px rgba(11,124,243,.24);filter:brightness(1.03)}
+.admin-module-sync i{font-size:17px}
+.admin-module-sync.is-loading i,.admin-module-sync[data-loading="1"] i{animation:adminModuleSyncSpin .8s linear infinite}
+.admin-module-sync:disabled{opacity:.72;cursor:wait;transform:none}
+@keyframes adminModuleSyncSpin{to{transform:rotate(360deg)}}
+body.theme-light .admin-module-sync{color:#fff;border-color:rgba(11,124,243,.18)}
+@media(max-width:1180px){.admin-module-sync span{display:none}.admin-module-sync{width:42px;padding:0;justify-content:center}}
+@media(max-width:560px){.admin-module-sync{width:38px;min-height:38px;border-radius:11px}.admin-module-sync i{font-size:16px}}

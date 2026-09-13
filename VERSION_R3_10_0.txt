@@ -1,0 +1,10 @@
+SERVICIOS INFORMATICOS AS - R3.10.0
+
+NUEVO:
+- Botón SINCRONIZAR visible en el header del CPANEL.
+- Sincroniza únicamente el módulo que está abierto.
+- Usa endpoint selectivo adminModule en Apps Script.
+- Mantiene loader en botón, splash central AS y confirmación de éxito/error.
+- Respeta sesión y permisos por módulo.
+
+IMPORTANTE: reemplazar SERVICIOS_INFORMATICOS_AS.gs y desplegar una Nueva versión del Web App.
