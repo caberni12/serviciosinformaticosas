@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const money=n=>new Intl.NumberFormat("es-CL",{style:"currency",currency:"CLP",maximumFractionDigits:0}).format(Number(n||0));
-let token="", data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],config:{}};
+let token="", data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],quotes:[],config:{},whatsappCloud:{configured:false}};
 const adminThemeKey = "asServiciosAdminThemeV2";
 
 const adminMenuStoreKey = "asServiciosAdminMenuCollapsed";
@@ -38,7 +38,45 @@ function initAdminMenu(){
   });
 }
 
-function toast(msg){const t=$("#adminToast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1900)}
+function toast(msg,type="success",detail=""){
+  const t=$("#adminToast"); if(!t) return;
+  const icon=type==="error"?"x-lg":type==="info"?"info-lg":"check-lg";
+  t.className=`toast admin-action-toast ${type}`;
+  t.innerHTML=`<span class="toast-icon"><i class="bi bi-${icon}"></i></span><span class="toast-copy"><strong>${esc(msg)}</strong>${detail?`<small>${esc(detail)}</small>`:""}</span>`;
+  requestAnimationFrame(()=>t.classList.add("show"));
+  clearTimeout(window.__adminToastTimer);
+  window.__adminToastTimer=setTimeout(()=>t.classList.remove("show"),2600);
+}
+function setButtonLoading(btn,loading,label="Procesando..."){
+  if(!btn) return;
+  if(loading){
+    if(btn.dataset.loading==="1") return;
+    btn.dataset.loading="1";
+    btn.dataset.originalHtml=btn.innerHTML;
+    btn.disabled=true;
+    btn.classList.add("is-loading");
+    btn.innerHTML=`<span class="admin-btn-spinner" aria-hidden="true"></span><span>${esc(label)}</span>`;
+  }else{
+    btn.dataset.loading="0";
+    btn.disabled=false;
+    btn.classList.remove("is-loading");
+    if(btn.dataset.originalHtml!==undefined){btn.innerHTML=btn.dataset.originalHtml;delete btn.dataset.originalHtml;}
+  }
+}
+async function runAdminAction(btn,task,{loading="Procesando...",success="Operación realizada",error="No fue posible completar la operación",successType="success"}={}){
+  if(btn?.dataset.loading==="1") return null;
+  setButtonLoading(btn,true,loading);
+  try{
+    const out=await task();
+    if(success) toast(typeof success==="function"?success(out):success,successType);
+    return out;
+  }catch(e){
+    console.error(e);
+    const message=typeof error==="function"?error(e):error;
+    toast(message,"error",String(e?.message||e||""));
+    return null;
+  }finally{setButtonLoading(btn,false)}
+}
 function showAdmin(){ $("#adminShell")?.classList.remove("hidden") }
 function applyAdminTheme(theme){
   document.body.classList.toggle("theme-light", theme === "light");
@@ -60,8 +98,9 @@ async function reload(){
   setAdminConnection("loading","Conectando...");
   // La lectura del CPANEL usa JSONP/GET para evitar bloqueos CORS/iframe en GitHub Pages.
   const r=await AleAPI.get("adminBootstrap",{});
-  data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],config:{}, ...r};
+  data={products:[],categories:[],banners:[],orders:[],requests:[],virtualMessages:[],quotes:[],config:{},whatsappCloud:{configured:false}, ...r};
   data.virtualMessages = Array.isArray(data.virtualMessages) ? data.virtualMessages : [];
+  data.quotes = Array.isArray(data.quotes) ? data.quotes : [];
   renderAll();
   setAdminConnection("online","Conectado");
 }
@@ -72,13 +111,37 @@ function renderAll(){
   $("#kpiOrders").textContent=data.orders.filter(x=>String(x.estado).toUpperCase()==="PENDIENTE").length;
   $("#kpiRequests").textContent=data.requests.filter(x=>String(x.estado).toUpperCase()==="NUEVA").length;
   $("#kpiStock").textContent=data.products.reduce((s,p)=>s+Number(p.stock||0),0);
-  $("#dashboardSummary").innerHTML=`<div class="summary-row"><span>Productos destacados</span><strong>${data.products.filter(p=>String(p.destacado).toUpperCase()==="SI").length}</strong></div><div class="summary-row"><span>Categorías activas</span><strong>${data.categories.length}</strong></div><div class="summary-row"><span>Banners activos</span><strong>${data.banners.length}</strong></div><div class="summary-row"><span>Total pedidos</span><strong>${data.orders.length}</strong></div><div class="summary-row"><span>Mensajes AS Virtual</span><strong>${data.virtualMessages.length}</strong></div>`;
-  fillCategorySelects();renderProducts();renderCategories();renderBanners();renderOrders();renderRequests();renderVirtual();renderSettings();
+  $("#dashboardSummary").innerHTML=`<div class="summary-row"><span>Productos destacados</span><strong>${data.products.filter(p=>String(p.destacado).toUpperCase()==="SI").length}</strong></div><div class="summary-row"><span>Categorías activas</span><strong>${data.categories.length}</strong></div><div class="summary-row"><span>Banners activos</span><strong>${data.banners.length}</strong></div><div class="summary-row"><span>Total pedidos</span><strong>${data.orders.length}</strong></div><div class="summary-row"><span>Mensajes AS Virtual</span><strong>${data.virtualMessages.length}</strong></div><div class="summary-row"><span>Cotizaciones</span><strong>${data.quotes.length}</strong></div>`;
+  fillCategorySelects();renderProducts();renderCategories();renderBanners();renderOrders();renderRequests();renderVirtual();renderQuotes();renderSettings();
 }
 function fillCategorySelects(){
-  const opts=data.categories.map(c=>`<option value="${esc(c.nombre)}">${esc(c.nombre)}</option>`).join("");
-  $("#pCategory").innerHTML=opts;$("#productFilter").innerHTML='<option value="">Todas las categorías</option>'+opts;
+  const categories=(data.categories||[])
+    .filter(c=>String(c.activo||"SI").toUpperCase()!=="NO")
+    .sort((a,b)=>Number(a.orden||0)-Number(b.orden||0)||String(a.nombre||"").localeCompare(String(b.nombre||"")));
+  const opts=categories.map(c=>`<option value="${esc(c.nombre)}">${esc(c.nombre)}</option>`).join("");
+  const select=$("#pCategory"), filter=$("#productFilter"), panel=$("#availableCategories");
+  if(select){
+    select.disabled=!categories.length;
+    select.innerHTML=categories.length
+      ? '<option value="">Seleccionar categoría</option>'+opts
+      : '<option value="">No hay categorías disponibles</option>';
+  }
+  if(filter) filter.innerHTML='<option value="">Todas las categorías</option>'+opts;
+  if(panel){
+    panel.innerHTML=categories.length
+      ? categories.map(c=>`<button type="button" class="available-category-chip" data-category="${esc(c.nombre)}">${esc(c.nombre)}</button>`).join("")
+      : '<div class="categories-empty">No hay categorías creadas. Usa “Administrar categorías” para agregar una.</div>';
+    panel.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{
+      if(select){ select.value=btn.dataset.category; refreshCategoryChipSelection(); }
+    }));
+  }
+  refreshCategoryChipSelection();
 }
+function refreshCategoryChipSelection(){
+  const value=$("#pCategory")?.value||"";
+  $$(".available-category-chip").forEach(btn=>btn.classList.toggle("active",btn.dataset.category===value));
+}
+window.selectProductCategory=name=>{if($("#pCategory")){ $("#pCategory").value=name; refreshCategoryChipSelection(); }};
 
 function table(headers,rows){return `<table class="admin-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows||`<tr><td colspan="${headers.length}">Sin registros</td></tr>`}</tbody></table>`}
 function imgTag(url){return url?`<img class="thumb" src="${esc(url)}" alt="">`:'<div class="thumb"></div>'}
@@ -86,35 +149,35 @@ function imgTag(url){return url?`<img class="thumb" src="${esc(url)}" alt="">`:'
 function renderProducts(){
   const q=$("#productSearch").value.toLowerCase(), f=$("#productFilter").value;
   const list=data.products.filter(p=>(p.nombre+" "+p.descripcion).toLowerCase().includes(q)&&(!f||p.categoria_nombre===f));
-  $("#productsTable").innerHTML=table(["Imagen","Producto","Categoría","Precio","Stock","Destacado","Acciones"],list.map(p=>`<tr><td>${imgTag(p.image_url)}</td><td><strong>${esc(p.nombre)}</strong><br><small>${esc(p.descripcion||"")}</small></td><td>${esc(p.categoria_nombre||"")}</td><td>${money(p.precio)}</td><td>${Number(p.stock||0)}</td><td>${String(p.destacado).toUpperCase()==="SI"?"Sí":"No"}</td><td><div class="row-actions"><button onclick="editProduct('${p.id}')">Editar</button><button class="danger" onclick="removeEntity('product','${p.id}')">Eliminar</button></div></td></tr>`).join(""));
+  $("#productsTable").innerHTML=table(["Imagen","Producto","Categoría","Precio","Stock","Destacado","Acciones"],list.map(p=>`<tr><td>${imgTag(p.image_url)}</td><td><strong>${esc(p.nombre)}</strong><br><small>${esc(p.descripcion||"")}</small></td><td>${esc(p.categoria_nombre||"")}</td><td>${money(p.precio)}</td><td>${Number(p.stock||0)}</td><td>${String(p.destacado).toUpperCase()==="SI"?"Sí":"No"}</td><td><div class="row-actions"><button onclick="editProduct('${p.id}')">Editar</button><button class="danger" onclick="removeEntity('product','${p.id}',this)">Eliminar</button></div></td></tr>`).join(""));
 }
-$("#productSearch").addEventListener("input",renderProducts);$("#productFilter").addEventListener("change",renderProducts);
+$("#productSearch").addEventListener("input",renderProducts);$("#productFilter").addEventListener("change",renderProducts);$("#pCategory")?.addEventListener("change",refreshCategoryChipSelection);
 $("#newProduct").addEventListener("click",()=>{clearProduct();$("#productEditor").classList.remove("hidden")});
-function clearProduct(){["pId","pImageId","pImageUrl","pName","pPrice","pStock","pOccasion","pDescription"].forEach(id=>$("#"+id).value="");$("#pFeatured").checked=false;$("#pImage").value=""}
-window.editProduct=id=>{const p=data.products.find(x=>x.id===id);if(!p)return;$("#pId").value=p.id;$("#pImageId").value=p.drive_file_id||"";$("#pImageUrl").value=p.image_url||"";$("#pName").value=p.nombre||"";$("#pPrice").value=p.precio||"";$("#pCategory").value=p.categoria_nombre||"";$("#pStock").value=p.stock||0;$("#pOccasion").value=p.ocasion||"";$("#pDescription").value=p.descripcion||"";$("#pFeatured").checked=String(p.destacado).toUpperCase()==="SI";$("#productEditor").classList.remove("hidden")}
-$("#saveProduct").addEventListener("click",async()=>{try{let imageId=$("#pImageId").value;let imageUrl=$("#pImageUrl").value;const file=$("#pImage").files[0];if(file){const uploaded=await upload(file,"PRODUCTOS");imageId=uploaded.fileId;imageUrl=uploaded.imageUrl||imageUrl;}const payload={id:$("#pId").value,nombre:$("#pName").value.trim(),descripcion:$("#pDescription").value.trim(),precio:Number($("#pPrice").value||0),categoria_nombre:$("#pCategory").value,stock:Number($("#pStock").value||0),drive_file_id:imageId,image_url:imageUrl,destacado:$("#pFeatured").checked?"SI":"NO",activo:"SI",ocasion:$("#pOccasion").value.trim()};await AleAPI.post("saveProduct",payload,token);toast("Producto guardado");$("#productEditor").classList.add("hidden");await reload()}catch(e){toast("No fue posible guardar")}});
+function clearProduct(){["pId","pImageId","pImageUrl","pName","pPrice","pStock","pOccasion","pDescription"].forEach(id=>$("#"+id).value="");if($("#pCategory"))$("#pCategory").value="";$("#pFeatured").checked=false;$("#pImage").value="";refreshCategoryChipSelection()}
+window.editProduct=id=>{const p=data.products.find(x=>x.id===id);if(!p)return;$("#pId").value=p.id;$("#pImageId").value=p.drive_file_id||"";$("#pImageUrl").value=p.image_url||"";$("#pName").value=p.nombre||"";$("#pPrice").value=p.precio||"";$("#pCategory").value=p.categoria_nombre||"";$("#pStock").value=p.stock||0;$("#pOccasion").value=p.ocasion||"";$("#pDescription").value=p.descripcion||"";$("#pFeatured").checked=String(p.destacado).toUpperCase()==="SI";refreshCategoryChipSelection();$("#productEditor").classList.remove("hidden")}
+$("#saveProduct").addEventListener("click",async e=>{const btn=e.currentTarget;await runAdminAction(btn,async()=>{let imageId=$("#pImageId").value;let imageUrl=$("#pImageUrl").value;const file=$("#pImage").files[0];if(file){const uploaded=await upload(file,"PRODUCTOS");imageId=uploaded.fileId;imageUrl=uploaded.imageUrl||imageUrl;}const payload={id:$("#pId").value,nombre:$("#pName").value.trim(),descripcion:$("#pDescription").value.trim(),precio:Number($("#pPrice").value||0),categoria_nombre:$("#pCategory").value,stock:Number($("#pStock").value||0),drive_file_id:imageId,image_url:imageUrl,destacado:$("#pFeatured").checked?"SI":"NO",activo:"SI",ocasion:$("#pOccasion").value.trim()};await AleAPI.post("saveProduct",payload,token);$("#productEditor").classList.add("hidden");await reload();return payload},{loading:"Guardando...",success:"Producto guardado correctamente",error:"No fue posible guardar el producto"})});
 
 function renderCategories(){
-  $("#categoriesTable").innerHTML=table(["Imagen","Categoría","Descripción","Orden","Acciones"],data.categories.map(c=>`<tr><td>${imgTag(c.image_url)}</td><td><strong>${esc(c.nombre)}</strong></td><td>${esc(c.descripcion||"")}</td><td>${Number(c.orden||0)}</td><td><div class="row-actions"><button onclick="editCategory('${c.id}')">Editar</button><button class="danger" onclick="removeEntity('category','${c.id}')">Eliminar</button></div></td></tr>`).join(""));
+  $("#categoriesTable").innerHTML=table(["Imagen","Categoría","Descripción","Orden","Acciones"],data.categories.map(c=>`<tr><td>${imgTag(c.image_url)}</td><td><strong>${esc(c.nombre)}</strong></td><td>${esc(c.descripcion||"")}</td><td>${Number(c.orden||0)}</td><td><div class="row-actions"><button onclick="editCategory('${c.id}')">Editar</button><button class="danger" onclick="removeEntity('category','${c.id}',this)">Eliminar</button></div></td></tr>`).join(""));
 }
 $("#newCategory").addEventListener("click",()=>{clearCategory();$("#categoryEditor").classList.remove("hidden")});function clearCategory(){["cId","cImageId","cImageUrl","cName","cOrder","cDescription"].forEach(id=>$("#"+id).value="");$("#cImage").value=""}
 window.editCategory=id=>{const c=data.categories.find(x=>x.id===id);$("#cId").value=c.id;$("#cImageId").value=c.drive_file_id||"";$("#cImageUrl").value=c.image_url||"";$("#cName").value=c.nombre||"";$("#cOrder").value=c.orden||0;$("#cDescription").value=c.descripcion||"";$("#categoryEditor").classList.remove("hidden")}
-$("#saveCategory").addEventListener("click",async()=>{try{let imageId=$("#cImageId").value;let imageUrl=$("#cImageUrl").value;const file=$("#cImage").files[0];if(file){const uploaded=await upload(file,"CATEGORIAS");imageId=uploaded.fileId;imageUrl=uploaded.imageUrl||imageUrl;}await AleAPI.post("saveCategory",{id:$("#cId").value,nombre:$("#cName").value.trim(),descripcion:$("#cDescription").value.trim(),drive_file_id:imageId,image_url:imageUrl,orden:Number($("#cOrder").value||0),activo:"SI"},token);toast("Categoría guardada");$("#categoryEditor").classList.add("hidden");await reload()}catch(e){toast("No fue posible guardar")}});
+$("#saveCategory").addEventListener("click",async e=>{const btn=e.currentTarget;await runAdminAction(btn,async()=>{let imageId=$("#cImageId").value;let imageUrl=$("#cImageUrl").value;const file=$("#cImage").files[0];if(file){const uploaded=await upload(file,"CATEGORIAS");imageId=uploaded.fileId;imageUrl=uploaded.imageUrl||imageUrl;}await AleAPI.post("saveCategory",{id:$("#cId").value,nombre:$("#cName").value.trim(),descripcion:$("#cDescription").value.trim(),drive_file_id:imageId,image_url:imageUrl,orden:Number($("#cOrder").value||0),activo:"SI"},token);$("#categoryEditor").classList.add("hidden");await reload()},{loading:"Guardando...",success:"Categoría guardada correctamente",error:"No fue posible guardar la categoría"})});
 
 function renderBanners(){
-  $("#bannersTable").innerHTML=table(["Imagen","Título","Botón","Orden","Acciones"],data.banners.map(b=>`<tr><td>${imgTag(b.image_url)}</td><td><strong>${esc(b.titulo)}</strong><br><small>${esc(b.subtitulo||"")}</small></td><td>${esc(b.cta_texto||"")}</td><td>${Number(b.orden||0)}</td><td><div class="row-actions"><button onclick="editBanner('${b.id}')">Editar</button><button class="danger" onclick="removeEntity('banner','${b.id}')">Eliminar</button></div></td></tr>`).join(""));
+  $("#bannersTable").innerHTML=table(["Imagen","Título","Botón","Orden","Acciones"],data.banners.map(b=>`<tr><td>${imgTag(b.image_url)}</td><td><strong>${esc(b.titulo)}</strong><br><small>${esc(b.subtitulo||"")}</small></td><td>${esc(b.cta_texto||"")}</td><td>${Number(b.orden||0)}</td><td><div class="row-actions"><button onclick="editBanner('${b.id}')">Editar</button><button class="danger" onclick="removeEntity('banner','${b.id}',this)">Eliminar</button></div></td></tr>`).join(""));
 }
 $("#newBanner").addEventListener("click",()=>{clearBanner();$("#bannerEditor").classList.remove("hidden")});function clearBanner(){["bId","bImageId","bImageUrl","bTitle","bSubtitle","bCta","bLink","bOrder"].forEach(id=>$("#"+id).value="");$("#bImage").value=""}
 window.editBanner=id=>{const b=data.banners.find(x=>x.id===id);$("#bId").value=b.id;$("#bImageId").value=b.drive_file_id||"";$("#bImageUrl").value=b.image_url||"";$("#bTitle").value=b.titulo||"";$("#bSubtitle").value=b.subtitulo||"";$("#bCta").value=b.cta_texto||"";$("#bLink").value=b.enlace||"";$("#bOrder").value=b.orden||0;$("#bannerEditor").classList.remove("hidden")}
-$("#saveBanner").addEventListener("click",async()=>{try{let imageId=$("#bImageId").value;let imageUrl=$("#bImageUrl").value;const file=$("#bImage").files[0];if(file){const uploaded=await upload(file,"BANNERS");imageId=uploaded.fileId;imageUrl=uploaded.imageUrl||imageUrl;}await AleAPI.post("saveBanner",{id:$("#bId").value,titulo:$("#bTitle").value.trim(),subtitulo:$("#bSubtitle").value.trim(),cta_texto:$("#bCta").value.trim(),enlace:$("#bLink").value.trim(),drive_file_id:imageId,image_url:imageUrl,activo:"SI",orden:Number($("#bOrder").value||0)},token);toast("Banner guardado");$("#bannerEditor").classList.add("hidden");await reload()}catch(e){toast("No fue posible guardar")}});
+$("#saveBanner").addEventListener("click",async e=>{const btn=e.currentTarget;await runAdminAction(btn,async()=>{let imageId=$("#bImageId").value;let imageUrl=$("#bImageUrl").value;const file=$("#bImage").files[0];if(file){const uploaded=await upload(file,"BANNERS");imageId=uploaded.fileId;imageUrl=uploaded.imageUrl||imageUrl;}await AleAPI.post("saveBanner",{id:$("#bId").value,titulo:$("#bTitle").value.trim(),subtitulo:$("#bSubtitle").value.trim(),cta_texto:$("#bCta").value.trim(),enlace:$("#bLink").value.trim(),drive_file_id:imageId,image_url:imageUrl,activo:"SI",orden:Number($("#bOrder").value||0)},token);$("#bannerEditor").classList.add("hidden");await reload()},{loading:"Guardando...",success:"Carrusel guardado correctamente",error:"No fue posible guardar el carrusel"})});
 
 function renderOrders(){
   $("#ordersTable").innerHTML=table(["Fecha","Cliente","Contacto","Entrega","Total","Estado"],data.orders.map(o=>`<tr><td>${esc(formatDate(o.fecha))}</td><td><strong>${esc(o.nombre)}</strong><br><small>${esc(o.id)}</small></td><td>${esc(o.telefono)}<br><small>${esc(o.email||"")}</small></td><td>${esc(o.metodo_entrega||"")}<br><small>${esc(o.direccion||"")}</small></td><td>${money(o.total)}</td><td><select class="status-select" onchange="changeStatus('order','${o.id}',this.value)">${["PENDIENTE","CONFIRMADO","EN PREPARACION","LISTO","ENTREGADO","CANCELADO"].map(s=>`<option ${String(o.estado).toUpperCase()===s?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join(""));
 }
 function renderRequests(){
-  $("#requestsTable").innerHTML=table(["Fecha","Cliente","Tipo","Evento","Detalle","Estado"],data.requests.map(r=>`<tr><td>${esc(formatDate(r.fecha))}</td><td><strong>${esc(r.nombre)}</strong><br><small>${esc(r.telefono)}</small></td><td>${esc(r.tipo||"")}</td><td>${esc(r.fecha_evento||"")}</td><td>${esc(r.detalle||"")}</td><td><select class="status-select" onchange="changeStatus('request','${r.id}',this.value)">${["NUEVA","CONTACTADA","COTIZADA","ACEPTADA","CERRADA"].map(s=>`<option ${String(r.estado).toUpperCase()===s?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join(""));
+  $("#requestsTable").innerHTML=table(["Fecha","Cliente","Tipo","Evento","Detalle","Estado"],data.requests.map(r=>`<tr><td>${esc(formatDate(r.fecha))}</td><td><strong>${esc(r.nombre)}</strong><br><small>${esc(r.telefono)}</small></td><td>${esc(r.tipo||"")}</td><td>${esc(r.fecha_evento||"")}</td><td>${esc(r.detalle||"")}<div class="request-quick-actions"><button onclick="quoteFromRequest('${r.id}')"><i class="bi bi-file-earmark-pdf"></i> Cotizar</button></div></td><td><select class="status-select" onchange="changeStatus('request','${r.id}',this.value)">${["NUEVA","CONTACTADA","COTIZADA","ACEPTADA","CERRADA"].map(s=>`<option ${String(r.estado).toUpperCase()===s?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join(""));
 }
-window.changeStatus=async(kind,id,status)=>{try{await AleAPI.post("updateStatus",{kind,id,status},token);toast("Estado actualizado");await reload()}catch(e){toast("No fue posible actualizar")}};
+window.changeStatus=async(kind,id,status)=>{try{await AleAPI.post("updateStatus",{kind,id,status},token);toast("Estado actualizado correctamente","success");await reload()}catch(e){toast("No fue posible actualizar el estado","error",String(e?.message||e))}};
 
 function renderVirtual(){
   const term=($("#virtualSearch")?.value || "").trim().toLowerCase();
@@ -157,17 +220,111 @@ function renderVirtual(){
       <div class="virtual-admin-message">${esc(r.mensaje || r.resumen || '').replace(/\n/g,'<br>')}</div>
       <div class="virtual-admin-actions">
         <select class="status-select" onchange="changeStatus('virtual','${r.id}',this.value)">${['NUEVO','EN_PROCESO','CONTACTADO','CERRADO'].map(s=>`<option ${status===s?'selected':''}>${s}</option>`).join('')}</select>
-        <button onclick="contactVirtual('${String(r.nombre||'').replace(/'/g,"&#039;")}','${String(r.contacto||'').replace(/'/g,"&#039;")}')"><i class="bi bi-whatsapp"></i> Contactar</button>
+        <button onclick="openVirtualReply('${r.id}')"><i class="bi bi-reply"></i> Responder</button><button onclick="quoteFromVirtual('${r.id}')"><i class="bi bi-file-earmark-pdf"></i> Cotizar</button><button onclick="contactVirtual('${String(r.nombre||'').replace(/'/g,"&#039;")}','${String(r.contacto||'').replace(/'/g,"&#039;")}')"><i class="bi bi-whatsapp"></i> Contactar</button>
       </div>
     </article>`;
   }).join('')}</div>`;
 }
 
-function renderSettings(){const c=data.config||{};$("#sLogoId").value=c.logo_drive_file_id||"";$("#sBusiness").value=c.empresa||"";$("#sWhatsapp").value=c.whatsapp||"";$("#sEmail").value=c.email||"";$("#sAddress").value=c.direccion||"";$("#sAssistantName").value=c.assistant_name||"AS Virtual";$("#sDefaultTheme").value=(c.default_theme||"light").toLowerCase()==="light"?"light":"dark";$("#sInstagram").value=c.instagram||"";$("#sFacebook").value=c.facebook||"";$("#sTiktok").value=c.tiktok||"";$("#sDelivery").value=c.valor_despacho||0}
-$("#saveSettings").addEventListener("click",async()=>{try{let logoId=$("#sLogoId").value;const f=$("#sLogo").files[0];if(f)logoId=(await upload(f,"LOGO")).fileId;await AleAPI.post("saveConfig",{empresa:$("#sBusiness").value.trim(),whatsapp:$("#sWhatsapp").value.trim(),email:$("#sEmail").value.trim(),direccion:$("#sAddress").value.trim(),assistant_name:$("#sAssistantName").value.trim() || "AS Virtual",default_theme:$("#sDefaultTheme").value || "light",instagram:$("#sInstagram").value.trim(),facebook:$("#sFacebook").value.trim(),tiktok:$("#sTiktok").value.trim(),valor_despacho:$("#sDelivery").value,logo_drive_file_id:logoId},token);toast("Configuración guardada");await reload()}catch(e){toast("No fue posible guardar")}});
+
+let quoteLineSeq=0;
+function addQuoteLine(item={}){
+  const wrap=document.createElement('div');
+  wrap.className='quote-line';
+  wrap.dataset.line=String(++quoteLineSeq);
+  wrap.innerHTML=`<input class="q-desc" placeholder="Servicio o producto" value="${esc(item.descripcion||'')}"><input class="q-qty" type="number" min="0.01" step="0.01" value="${Number(item.cantidad||1)}"><input class="q-price" type="number" min="0" step="1" value="${Number(item.precio_unitario||0)}"><strong class="q-line-total">${money(Number(item.cantidad||1)*Number(item.precio_unitario||0))}</strong><button class="q-remove" type="button" aria-label="Eliminar"><i class="bi bi-trash3"></i></button>`;
+  $('#quoteItems').appendChild(wrap);
+  wrap.querySelectorAll('input').forEach(x=>x.addEventListener('input',updateQuoteTotals));
+  wrap.querySelector('.q-remove').addEventListener('click',()=>{wrap.remove();if(!$('#quoteItems').children.length)addQuoteLine();updateQuoteTotals()});
+  updateQuoteTotals();
+}
+function quoteItemsPayload(){return $$('#quoteItems .quote-line').map(row=>({descripcion:row.querySelector('.q-desc').value.trim(),cantidad:Number(row.querySelector('.q-qty').value||0),precio_unitario:Number(row.querySelector('.q-price').value||0)})).filter(x=>x.descripcion&&x.cantidad>0)}
+function updateQuoteTotals(){
+  let subtotal=0;
+  $$('#quoteItems .quote-line').forEach(row=>{const q=Number(row.querySelector('.q-qty').value||0),p=Number(row.querySelector('.q-price').value||0),v=q*p;subtotal+=v;row.querySelector('.q-line-total').textContent=money(v)});
+  const iva=$('#qApplyIva')?.checked?Math.round(subtotal*.19):0,total=subtotal+iva;
+  if($('#quoteLiveTotal')) $('#quoteLiveTotal').innerHTML=`<span>Subtotal <b>${money(subtotal)}</b></span><span>IVA <b>${money(iva)}</b></span><strong>Total <b>${money(total)}</b></strong>`;
+  return {subtotal,iva,total};
+}
+function clearQuoteForm(){
+  ['qId','qName','qCompany','qRut','qPhone','qEmail','qNotes'].forEach(id=>{if($('#'+id))$('#'+id).value=''});
+  $('#qValidDays').value=15;$('#qApplyIva').checked=true;$('#quoteItems').innerHTML='';quoteLineSeq=0;addQuoteLine();
+}
+function collectQuotePayload(){
+  const items=quoteItemsPayload(), totals=updateQuoteTotals();
+  if(!$('#qName').value.trim()) throw new Error('INGRESA_CLIENTE');
+  if(!items.length) throw new Error('AGREGA_DETALLE');
+  return {id:$('#qId').value||'',cliente_nombre:$('#qName').value.trim(),empresa:$('#qCompany').value.trim(),rut:$('#qRut').value.trim(),telefono:$('#qPhone').value.trim(),email:$('#qEmail').value.trim(),items,aplicar_iva:$('#qApplyIva').checked,validez_dias:Number($('#qValidDays').value||15),observaciones:$('#qNotes').value.trim(),...totals,origen:'CPANEL'};
+}
+async function saveQuote(mode="pdf",btn=null){
+  let payload;
+  try{payload=collectQuotePayload()}catch(e){toast(e.message==='INGRESA_CLIENTE'?'Ingresa el nombre del cliente':'Agrega al menos una línea a la cotización','error');return null}
+  const loading=mode==='email'?'Generando y enviando...':mode==='whatsapp'?'Generando y enviando...':'Generando PDF...';
+  return runAdminAction(btn,async()=>{
+    const r=await AleAPI.post('saveQuote',payload,token);
+    $('#qId').value=r.id||payload.id||'';
+    if(mode==='email'){
+      if(!payload.email) throw new Error('FALTA_EMAIL_CLIENTE');
+      await AleAPI.post('sendQuoteEmail',{id:r.id,email:payload.email},token);
+    }
+    if(mode==='whatsapp'){
+      if(!payload.telefono) throw new Error('FALTA_WHATSAPP_CLIENTE');
+      const out=await AleAPI.post('sendQuoteWhatsApp',{id:r.id,telefono:payload.telefono},token);
+      if(out?.whatsapp_url) window.open(out.whatsapp_url,'_blank');
+      r.whatsapp=out;
+    }
+    await reload();
+    return r;
+  },{
+    loading,
+    success:out=>mode==='email'?'Cotización generada y enviada por correo':mode==='whatsapp'?(out?.whatsapp?.sent?'PDF enviado por WhatsApp':'Cotización preparada para WhatsApp'):'PDF de cotización generado correctamente',
+    error:e=>mode==='email'?'No fue posible generar o enviar la cotización por correo':mode==='whatsapp'?'No fue posible generar o enviar la cotización por WhatsApp':'No fue posible generar la cotización'
+  });
+}
+function renderQuotes(){
+  const rows=data.quotes||[];
+  if(!rows.length){$('#quotesTable').innerHTML='<div class="empty-admin-state"><i class="bi bi-file-earmark-pdf"></i><strong>Sin cotizaciones</strong><span>Las cotizaciones generadas aparecerán aquí.</span></div>';return;}
+  $('#quotesTable').innerHTML=table(['Fecha','Cliente','Total','Estado','PDF','Acciones'],rows.map(q=>`<tr><td>${esc(formatDate(q.fecha))}<br><small>${esc(q.id||'')}</small></td><td><strong>${esc(q.cliente_nombre||'')}</strong><br><small>${esc(q.empresa||q.email||q.telefono||'')}</small></td><td>${money(q.total)}</td><td><select class="status-select" onchange="changeStatus('quote','${q.id}',this.value)">${['BORRADOR','ENVIADA','ACEPTADA','RECHAZADA','VENCIDA'].map(s=>`<option ${String(q.estado||'BORRADOR').toUpperCase()===s?'selected':''}>${s}</option>`).join('')}</select></td><td>${q.pdf_url?`<a class="office-pdf-link" href="${esc(q.pdf_url)}" target="_blank"><i class="bi bi-file-earmark-pdf"></i> Abrir</a>`:'-'}</td><td><div class="row-actions"><button onclick="emailQuote('${q.id}',this)"><i class="bi bi-envelope"></i> Email</button><button onclick="whatsappQuote('${q.id}',this)"><i class="bi bi-whatsapp"></i> WhatsApp PDF</button></div></td></tr>`).join(''));
+}
+window.emailQuote=async(id,btn)=>{const q=data.quotes.find(x=>x.id===id);if(!q?.email){toast('La cotización no tiene email','error');return;}await runAdminAction(btn,async()=>{await AleAPI.post('sendQuoteEmail',{id,email:q.email},token);await reload()},{loading:'Enviando...',success:'Cotización enviada por correo',error:'No fue posible enviar el correo'})};
+window.whatsappQuote=async(id,btn)=>{const q=data.quotes.find(x=>x.id===id);if(!q)return;const phone=String(q.telefono||'').replace(/\D/g,'');if(phone.length<8){toast('La cotización no tiene WhatsApp válido','error');return;}await runAdminAction(btn,async()=>{const out=await AleAPI.post('sendQuoteWhatsApp',{id,telefono:q.telefono},token);if(out?.whatsapp_url)window.open(out.whatsapp_url,'_blank');await reload();return out},{loading:'Enviando PDF...',success:out=>out?.sent?'PDF enviado por WhatsApp':'WhatsApp preparado con el PDF',error:'No fue posible enviar la cotización por WhatsApp'})};
+function switchAdminView(view){document.querySelector(`[data-view="${view}"]`)?.click()}
+window.quoteFromRequest=id=>{const r=data.requests.find(x=>x.id===id);if(!r)return;clearQuoteForm();$('#qName').value=r.nombre||'';$('#qPhone').value=r.telefono||'';$('#qEmail').value=r.email||'';$('#qNotes').value=r.detalle||'';switchAdminView('office');setTimeout(()=>$('#qCompany')?.focus(),80)};
+window.quoteFromVirtual=id=>{const r=data.virtualMessages.find(x=>x.id===id);if(!r)return;clearQuoteForm();$('#qName').value=r.nombre||'';const contact=String(r.contacto||'');if(contact.includes('@'))$('#qEmail').value=contact;else $('#qPhone').value=contact;$('#qNotes').value=r.mensaje||'';switchAdminView('office')};
+window.openVirtualReply=id=>{const r=data.virtualMessages.find(x=>x.id===id);if(!r)return;$('#vrId').value=id;$('#vrContext').innerHTML=`<strong>${esc(r.nombre||'Cliente')}</strong><span>${esc(r.contacto||'')}</span><p>${esc(r.mensaje||'')}</p>`;$('#vrReply').value=r.respuesta||'';$('#virtualReplyModal').classList.add('show')};
+$('#closeVirtualReply')?.addEventListener('click',()=>$('#virtualReplyModal').classList.remove('show'));
+$('#suggestReply')?.addEventListener('click',async e=>{const btn=e.currentTarget,id=$('#vrId').value,r=data.virtualMessages.find(x=>x.id===id);if(!r)return;await runAdminAction(btn,async()=>{const out=await AleAPI.post('suggestClientReply',{nombre:r.nombre||'',mensaje:r.mensaje||''},token);$('#vrReply').value=out.suggestion||'';return out},{loading:'Analizando...',success:'Respuesta sugerida',error:'No fue posible sugerir respuesta'})});
+$('#sendVirtualReply')?.addEventListener('click',async e=>{const btn=e.currentTarget,id=$('#vrId').value,reply=$('#vrReply').value.trim();if(!reply){toast('Escribe una respuesta','error');return;}await runAdminAction(btn,async()=>{const out=await AleAPI.post('replyVirtualClient',{id,respuesta:reply,medio:$('#vrMethod').value},token);if(out.whatsapp_url)window.open(out.whatsapp_url,'_blank');$('#virtualReplyModal').classList.remove('show');await reload();return out},{loading:'Respondiendo...',success:out=>out?.sent_email?'Respuesta enviada por correo':'Respuesta preparada para el cliente',error:'No fue posible responder al cliente'})});
+$('#addQuoteItem')?.addEventListener('click',()=>addQuoteLine());
+$('#qApplyIva')?.addEventListener('change',updateQuoteTotals);
+$('#generateQuote')?.addEventListener('click',e=>saveQuote('pdf',e.currentTarget));
+$('#generateAndEmail')?.addEventListener('click',e=>saveQuote('email',e.currentTarget));
+$('#generateAndWhatsapp')?.addEventListener('click',e=>saveQuote('whatsapp',e.currentTarget));
+$('#clearQuote')?.addEventListener('click',clearQuoteForm);
+$('#newQuote')?.addEventListener('click',()=>{clearQuoteForm();$('#qName')?.focus()});
+setTimeout(()=>{if($('#quoteItems')&&!$('#quoteItems').children.length)addQuoteLine()},0);
+
+function renderSettings(){
+  const c=data.config||{},wa=data.whatsappCloud||{};
+  $("#sLogoId").value=c.logo_drive_file_id||"";$("#sBusiness").value=c.empresa||"";$("#sWhatsapp").value=c.whatsapp||"";$("#sEmail").value=c.email||"";$("#sAddress").value=c.direccion||"";$("#sAssistantName").value=c.assistant_name||"AS Virtual";$("#sDefaultTheme").value=(c.default_theme||"light").toLowerCase()==="light"?"light":"dark";$("#sInstagram").value=c.instagram||"";$("#sFacebook").value=c.facebook||"";$("#sTiktok").value=c.tiktok||"";$("#sDelivery").value=c.valor_despacho||0;
+  if($("#waPhoneNumberId")) $("#waPhoneNumberId").value=wa.phone_number_id||"";
+  if($("#waGraphVersion")) $("#waGraphVersion").value=wa.graph_version||"v23.0";
+  if($("#waAccessToken")) $("#waAccessToken").value="";
+  const status=$("#waCloudStatus");
+  if(status){status.classList.toggle("is-online",!!wa.configured);status.innerHTML=`<span class="status-dot"></span><strong>${wa.configured?'Configurado para enviar PDF directo':'No configurado: se usará enlace por WhatsApp'}</strong>`;}
+}
+$("#saveSettings").addEventListener("click",async e=>{const btn=e.currentTarget;await runAdminAction(btn,async()=>{let logoId=$("#sLogoId").value;const f=$("#sLogo").files[0];if(f)logoId=(await upload(f,"LOGO")).fileId;await AleAPI.post("saveConfig",{empresa:$("#sBusiness").value.trim(),whatsapp:$("#sWhatsapp").value.trim(),email:$("#sEmail").value.trim(),direccion:$("#sAddress").value.trim(),assistant_name:$("#sAssistantName").value.trim() || "AS Virtual",default_theme:$("#sDefaultTheme").value || "light",instagram:$("#sInstagram").value.trim(),facebook:$("#sFacebook").value.trim(),tiktok:$("#sTiktok").value.trim(),valor_despacho:$("#sDelivery").value,logo_drive_file_id:logoId},token);await reload()},{loading:"Guardando...",success:"Configuración guardada correctamente",error:"No fue posible guardar la configuración"})});
+$("#saveWhatsAppCloud")?.addEventListener("click",async e=>{const btn=e.currentTarget;await runAdminAction(btn,async()=>{const payload={phone_number_id:$("#waPhoneNumberId").value.trim(),graph_version:$("#waGraphVersion").value.trim()||"v23.0",access_token:$("#waAccessToken").value.trim()};const out=await AleAPI.post("saveWhatsAppCloudConfig",payload,token);data.whatsappCloud=out.status||data.whatsappCloud;renderSettings();return out},{loading:"Conectando...",success:"Integración de WhatsApp guardada",error:"No fue posible guardar WhatsApp Business"})});
+$("#clearWhatsAppToken")?.addEventListener("click",async e=>{if(!confirm("¿Quitar el token de WhatsApp Business?"))return;const btn=e.currentTarget;await runAdminAction(btn,async()=>{const out=await AleAPI.post("saveWhatsAppCloudConfig",{clear_token:true},token);data.whatsappCloud=out.status||{configured:false};renderSettings();return out},{loading:"Quitando...",success:"Token de WhatsApp eliminado",error:"No fue posible quitar el token"})});
 
 async function upload(file,kind){if(file.size>6*1024*1024)throw new Error("IMAGEN_MUY_GRANDE");const dataUrl=await AleAPI.fileToDataUrl(file);return AleAPI.post("uploadImage",{kind,fileName:file.name,dataUrl},token)}
-window.removeEntity=async(kind,id)=>{if(!confirm("¿Eliminar este registro?"))return;try{await AleAPI.post("deleteEntity",{kind,id},token);toast("Registro eliminado");await reload()}catch(e){toast("No fue posible eliminar")}};
+
+$("#goCategories")?.addEventListener("click",()=>{
+  document.querySelector('[data-view="categories"]')?.click();
+  setTimeout(()=>$("#newCategory")?.focus(),80);
+});
+
+window.removeEntity=async(kind,id,btn)=>{if(!confirm("¿Eliminar este registro?"))return;await runAdminAction(btn,async()=>{await AleAPI.post("deleteEntity",{kind,id},token);await reload()},{loading:"Eliminando...",success:"Registro eliminado correctamente",error:"No fue posible eliminar el registro"})};
 
 window.contactVirtual=(name,contact)=>{
   const msg=`Hola ${name || ''}, te contactamos desde SERVICIOS INFORMÁTICOS AS por tu solicitud enviada mediante AS Virtual.`.trim();
@@ -181,12 +338,12 @@ $$("[data-cancel]").forEach(b=>b.addEventListener("click",()=>$("#"+b.dataset.ca
 $$(".admin-nav button").forEach(btn=>btn.addEventListener("click",()=>{$$(".admin-nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");$$(".admin-view").forEach(x=>x.classList.remove("active"));$("#view-"+btn.dataset.view).classList.add("active");$("#viewTitle").textContent=btn.textContent.trim();if(isAdminMobile())setAdminMenu(false)}));
 $$("[data-admin-theme]").forEach(btn=>btn.addEventListener("click",()=>applyAdminTheme(btn.dataset.adminTheme)));
 function formatDate(v){if(!v)return"";const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString("es-CL")}
-$("#adminRetry")?.addEventListener("click",async()=>{try{await reload();toast("CPANEL conectado")}catch(e){console.error(e);setAdminConnection("offline","Sin conexión");toast("No fue posible conectar")}});
+$("#adminRetry")?.addEventListener("click",async e=>{const btn=e.currentTarget;await runAdminAction(btn,async()=>{await reload();return true},{loading:"Conectando...",success:"CPANEL conectado correctamente",error:e=>{setAdminConnection("offline","Sin conexión");return "No fue posible conectar el CPANEL"}})});
 (async()=>{
   initAdminTheme();
   initAdminMenu();
   showAdmin();
-  if(!AleAPI.configured()){toast("Configura la URL del Web App en config.js");return;}
+  if(!AleAPI.configured()){toast("Configura la URL del Web App en config.js","error");return;}
   try{await reload();}
-  catch(e){console.error(e);setAdminConnection("offline","Sin conexión");toast("No fue posible conectar el CPANEL con la BD");}
+  catch(e){console.error(e);setAdminConnection("offline","Sin conexión");toast("No fue posible conectar el CPANEL con la BD","error",String(e?.message||e));}
 })();

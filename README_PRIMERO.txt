@@ -42,4 +42,4 @@ WhatsApp de información configurado: +56 9 6861 3559. Puedes cambiarlo posterio
 
 
 BACKEND GOOGLE APPS SCRIPT CONFIGURADO:
-https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hlhASv7Ykhm4s6QHGtklSprbIH01Oug/exec
+https://script.google.com/macros/s/AKfycbyu62h7FqjGNYjMbelH9wGfZazioE2j8MDGe92i2cHT8oXn2xO9aTpcDtlIHV_0sjV3kg/exec

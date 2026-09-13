@@ -313,3 +313,104 @@ body.theme-light .virtual-admin-kpis article::before{border-color:rgba(11,124,24
   .circular-kpis{grid-template-columns:1fr}
   .virtual-admin-kpis{grid-template-columns:1fr 1fr}
 }
+
+
+/* R3.6.27 - categorías disponibles en Productos */
+.admin-field{display:grid;gap:6px}.admin-field>span{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}.admin-field select{width:100%}
+.available-categories-panel{margin:14px 0 4px;padding:14px;border:1px solid var(--line);border-radius:15px;background:rgba(25,230,255,.025)}
+.available-categories-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.available-categories-head>div{display:grid;gap:3px}.available-categories-head strong{font-size:12px}.available-categories-head small{font-size:10px;color:var(--muted)}
+.category-manage-btn{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--cyan);border-radius:10px;padding:8px 10px;font-size:10px;font-weight:800}
+.available-categories{display:flex;flex-wrap:wrap;gap:8px}.available-category-chip{border:1px solid rgba(25,230,255,.20);background:rgba(25,230,255,.05);color:#ccecff;border-radius:999px;padding:8px 11px;font-size:10px;font-weight:800;transition:.18s}.available-category-chip:hover,.available-category-chip.active{background:rgba(25,230,255,.16);border-color:rgba(25,230,255,.42);color:var(--cyan);transform:translateY(-1px)}
+.categories-empty{width:100%;padding:12px;border:1px dashed var(--line);border-radius:11px;color:var(--muted);font-size:11px;text-align:center}
+body.theme-light .available-categories-panel{background:#f7fbfe;border-color:rgba(15,72,120,.12)}body.theme-light .category-manage-btn{background:#fff;color:#0b7cf3;border-color:rgba(15,72,120,.14)}body.theme-light .available-category-chip{background:#fff;color:#294b67;border-color:rgba(15,72,120,.14)}body.theme-light .available-category-chip:hover,body.theme-light .available-category-chip.active{background:#e8f5ff;color:#0b7cf3;border-color:rgba(11,124,243,.28)}
+@media(max-width:640px){.available-categories-head{align-items:flex-start;flex-direction:column}.category-manage-btn{width:100%}}
+
+
+/* R3.7.0 - AS Virtual Oficina */
+.office-intro{margin:8px 0 0;color:var(--muted);font-size:12px}.office-grid{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;align-items:start}.office-quote-editor{border:1px solid var(--line);border-radius:20px;padding:22px;background:rgba(255,255,255,.025)}.office-section-title{display:flex;align-items:center;gap:11px;margin:4px 0 14px}.office-section-title>i{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:rgba(25,230,255,.08);color:var(--cyan);font-size:18px}.office-section-title>div{display:grid}.office-section-title strong{font-size:13px}.office-section-title small{font-size:10px;color:var(--muted);margin-top:3px}.quote-items-title{margin-top:22px}.quote-items-title .office-mini-btn{margin-left:auto}.office-mini-btn{border:1px solid var(--line);background:rgba(25,230,255,.05);color:var(--cyan);border-radius:10px;padding:9px 11px;font-size:10px;font-weight:800}.quote-items{display:grid;gap:8px}.quote-line{display:grid;grid-template-columns:minmax(180px,1fr) 80px 130px 110px 38px;gap:8px;align-items:center}.quote-line input{min-width:0;border:1px solid var(--line);background:#071321;color:var(--text);border-radius:10px;padding:11px}.quote-line .q-line-total{text-align:right;font-size:12px}.q-remove{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,83,101,.20);background:rgba(255,83,101,.06);color:#ff6677}.quote-options{display:grid;gap:12px;margin-top:16px}.quote-options textarea{width:100%;min-height:90px;border:1px solid var(--line);background:#071321;color:var(--text);border-radius:12px;padding:13px;resize:vertical}.quote-live-total{display:flex;justify-content:flex-end;gap:20px;align-items:center;margin:16px 0;padding:13px 15px;border:1px solid var(--line);border-radius:14px;background:rgba(25,230,255,.035);font-size:11px}.quote-live-total span{color:var(--muted)}.quote-live-total b{margin-left:5px;color:var(--text)}.quote-live-total strong{font-size:13px;color:var(--cyan)}.office-side{display:grid;gap:10px}.office-side-card{padding:17px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025);display:grid;gap:7px}.office-side-card i{font-size:24px;color:var(--cyan)}.office-side-card strong{font-size:12px}.office-side-card span{font-size:10px;line-height:1.5;color:var(--muted)}.office-pdf-link{display:inline-flex;align-items:center;gap:6px;color:#ff6677;font-weight:800}.office-reply-modal textarea{width:100%;min-height:150px;border:1px solid var(--line);background:#071321;color:var(--text);border-radius:12px;padding:13px;margin:12px 0}.office-client-context{border:1px solid var(--line);border-radius:14px;padding:13px;background:rgba(255,255,255,.025);display:grid;gap:4px}.office-client-context strong{font-size:13px}.office-client-context span{font-size:10px;color:var(--cyan)}.office-client-context p{font-size:11px;color:var(--muted);line-height:1.55;margin:5px 0 0}.request-quick-actions{margin-top:8px}.request-quick-actions button{border:1px solid rgba(25,230,255,.18);background:rgba(25,230,255,.05);color:var(--cyan);border-radius:8px;padding:6px 8px;font-size:9px;font-weight:800}
+body.theme-light .office-quote-editor,body.theme-light .office-side-card,body.theme-light .office-client-context{background:linear-gradient(180deg,#fff,#f5f9fd);border-color:rgba(15,72,120,.14)}body.theme-light .quote-line input,body.theme-light .quote-options textarea,body.theme-light .office-reply-modal textarea{background:#fff;color:#0b253e;border-color:rgba(15,72,120,.14)}body.theme-light .quote-live-total{background:#f1f8fe;border-color:rgba(15,72,120,.12)}body.theme-light .quote-live-total strong{color:#0b7cf3}
+@media(max-width:980px){.office-grid{grid-template-columns:1fr}.office-side{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:720px){.quote-line{grid-template-columns:1fr 70px 110px 38px}.quote-line .q-line-total{grid-column:1/-1;text-align:left;padding-left:4px}.office-side{grid-template-columns:1fr}.quote-live-total{align-items:flex-end;flex-direction:column;gap:6px}.office-actions .btn{width:100%}}
+
+/* R3.7.2 - loaders y confirmaciones visuales en CPANEL */
+button.is-loading,.btn.is-loading,.row-actions button.is-loading{
+  position:relative;
+  pointer-events:none;
+  opacity:.84;
+  cursor:wait;
+}
+.admin-btn-spinner{
+  width:15px;
+  height:15px;
+  flex:0 0 15px;
+  display:inline-block;
+  border:2px solid currentColor;
+  border-right-color:transparent;
+  border-radius:50%;
+  animation:adminBtnSpin .65s linear infinite;
+}
+@keyframes adminBtnSpin{to{transform:rotate(360deg)}}
+.btn.is-loading,.row-actions button.is-loading,.admin-retry.is-loading,.office-mini-btn.is-loading{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.admin-action-toast{
+  min-width:min(390px,calc(100vw - 28px));
+  max-width:520px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:12px 15px;
+  border-radius:15px;
+  box-shadow:0 22px 60px rgba(0,0,0,.24);
+}
+.admin-action-toast .toast-icon{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  flex:0 0 34px;
+  font-size:16px;
+  font-weight:900;
+}
+.admin-action-toast .toast-copy{display:grid;gap:2px;text-align:left}
+.admin-action-toast .toast-copy strong{font-size:12px;line-height:1.35}
+.admin-action-toast .toast-copy small{font-size:9px;line-height:1.35;opacity:.78;max-width:410px;overflow:hidden;text-overflow:ellipsis}
+.admin-action-toast.success{border-color:rgba(45,200,120,.38)}
+.admin-action-toast.success .toast-icon{background:rgba(45,200,120,.16);color:#4fe099;border:1px solid rgba(45,200,120,.32)}
+.admin-action-toast.error{border-color:rgba(255,86,105,.38)}
+.admin-action-toast.error .toast-icon{background:rgba(255,86,105,.14);color:#ff6677;border:1px solid rgba(255,86,105,.30)}
+.admin-action-toast.info{border-color:rgba(25,230,255,.30)}
+.admin-action-toast.info .toast-icon{background:rgba(25,230,255,.10);color:var(--cyan);border:1px solid rgba(25,230,255,.24)}
+body.theme-light .admin-action-toast{background:#ffffff;color:#0b253e;box-shadow:0 18px 50px rgba(13,52,88,.16)}
+body.theme-light .admin-action-toast.success .toast-icon{color:#09834e;background:#eaf9f1}
+body.theme-light .admin-action-toast.error .toast-icon{color:#c83e50;background:#fff0f2}
+
+/* WhatsApp Business Cloud API */
+.btn-whatsapp{border-color:rgba(37,211,102,.28)!important}
+.btn-whatsapp i{color:#25d366}
+.whatsapp-cloud-settings{margin-top:18px}
+.wa-cloud-status{
+  margin:14px 0 2px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  color:var(--muted);
+  font-size:10px;
+}
+.wa-cloud-status .status-dot{width:8px;height:8px;border-radius:50%;background:#ff6677;box-shadow:0 0 0 4px rgba(255,102,119,.08)}
+.wa-cloud-status.is-online{color:#7fe8b1;border-color:rgba(45,200,120,.24)}
+.wa-cloud-status.is-online .status-dot{background:#34d17b;box-shadow:0 0 0 4px rgba(52,209,123,.10)}
+.danger-soft{border-color:rgba(255,86,105,.20)!important;color:#ff6677!important}
+body.theme-light .wa-cloud-status{background:#f7fbfe;border-color:rgba(15,72,120,.12);color:#506d85}
+body.theme-light .wa-cloud-status.is-online{color:#087643;border-color:rgba(8,118,67,.18);background:#effaf4}
+@media(max-width:560px){
+  .admin-action-toast{min-width:calc(100vw - 24px);bottom:14px;padding:11px 12px}
+  .office-actions .btn{width:100%}
+}

@@ -8,13 +8,13 @@ SERVICIOS INFORMÁTICOS AS - PRUEBA SOLICITUDES R3.6.11
 3. Ve a IMPLEMENTAR > ADMINISTRAR IMPLEMENTACIONES.
 
 4. Edita la implementación que corresponde a esta URL:
-   https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hlhASv7Ykhm4s6QHGtklSprbIH01Oug/exec
+   https://script.google.com/macros/s/AKfycbyu62h7FqjGNYjMbelH9wGfZazioE2j8MDGe92i2cHT8oXn2xO9aTpcDtlIHV_0sjV3kg/exec
 
 5. En VERSIÓN selecciona NUEVA VERSIÓN y pulsa IMPLEMENTAR.
    No basta con guardar el GS. La URL /exec ejecuta la última versión publicada.
 
 6. Comprueba en el navegador:
-   https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hlhASv7Ykhm4s6QHGtklSprbIH01Oug/exec?action=health
+   https://script.google.com/macros/s/AKfycbyu62h7FqjGNYjMbelH9wGfZazioE2j8MDGe92i2cHT8oXn2xO9aTpcDtlIHV_0sjV3kg/exec?action=health
 
 Debe responder con:
    "ok": true

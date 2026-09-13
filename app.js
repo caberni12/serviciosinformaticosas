@@ -520,7 +520,7 @@ function virtualAssistantTemplate(){
     </button>
     <div class="virtual-panel">
       <div class="virtual-head">
-        <div class="virtual-head-brand"><img src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="AS"><div><small>Asistente inteligente</small><strong>${esc(state.config.assistant_name || 'AS Virtual')}</strong></div></div>
+        <div class="virtual-head-brand"><img src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="AS"><div><small>Oficina virtual inteligente</small><strong>${esc(state.config.assistant_name || 'AS Virtual')}</strong></div></div>
         <div class="virtual-head-actions">
           <button id="virtualClear" aria-label="Limpiar chat" title="Limpiar chat">${icon('trash3')}</button>
           <button id="virtualClose" aria-label="Cerrar chat" title="Cerrar">${icon('x-lg')}</button>
@@ -532,6 +532,7 @@ function virtualAssistantTemplate(){
         <button data-virtual-question="Necesito un sistema de gestión">Sistema de gestión</button>
         <button data-virtual-question="Busco una aplicación Android">Aplicación Android</button>
         <button data-virtual-question="Necesito ayuda con PostgreSQL y APIs">PostgreSQL / API</button>
+        <button data-virtual-question="Quiero solicitar una cotización formal">Cotización</button>
       </div>
       <div class="virtual-contact" id="virtualContactPanel">
         <div class="virtual-contact-title"><strong>Hablar con administración</strong><small>Déjanos tus datos y enviaremos el historial de esta conversación.</small></div>

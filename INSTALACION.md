@@ -63,7 +63,7 @@ NOVEDADES RÁPIDAS
 
 
 BACKEND GOOGLE APPS SCRIPT CONFIGURADO:
-https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hlhASv7Ykhm4s6QHGtklSprbIH01Oug/exec
+https://script.google.com/macros/s/AKfycbyu62h7FqjGNYjMbelH9wGfZazioE2j8MDGe92i2cHT8oXn2xO9aTpcDtlIHV_0sjV3kg/exec
 
 - R3.6.7: CPANEL con botón hamburguesa, menú lateral deslizable y scroll vertical propio.
 - En escritorio el menú puede contraerse; en tablet/móvil funciona como slider/off-canvas con overlay.
@@ -79,7 +79,7 @@ https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hl
 - Prueba rápida: abre la URL `/exec?action=health` después de desplegar la nueva versión.
 
 - R3.6.10: actualizada la URL oficial del Web App a:
-  https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hlhASv7Ykhm4s6QHGtklSprbIH01Oug/exec
+  https://script.google.com/macros/s/AKfycbyu62h7FqjGNYjMbelH9wGfZazioE2j8MDGe92i2cHT8oXn2xO9aTpcDtlIHV_0sjV3kg/exec
 
 - R3.6.11: transporte Web/CPANEL -> Apps Script reemplazado por FORM + IFRAME con postMessage para evitar CORS y recibir confirmación real.
 - R3.6.11: SOLICITUDES valida que exista la hoja, usa lock, SpreadsheetApp.flush() e ID único.
@@ -120,3 +120,27 @@ https://script.google.com/macros/s/AKfycbzl2Qt_hFI9ox6M2fIXSd2qQ9sfMmTE8bR-eQ6hl
 - R3.6.24: tarjetas del catálogo rediseñadas para verse más claras y con mejor contraste en tema blanco.
 
 - R3.6.25: se eliminaron textos explicativos internos del portafolio y del catálogo solicitado por el usuario.
+
+- R3.6.26: se reforzó el contraste del menú desplegable del header y del menú móvil en tema claro.
+
+- R3.6.27: Productos muestra selector y chips de Categorías disponibles; se cargaron categorías base en la BD oficial.
+
+- R3.7.0: AS Virtual Oficina agrega cotizaciones PDF automáticas, envío por email, respuesta a clientes e historial COTIZACIONES.
+- Para WhatsApp directo automático se requiere WhatsApp Business API; sin API se abre el mensaje preparado con el enlace al PDF.
+
+- R3.7.0: nueva Oficina Virtual integrada con AS Virtual, cotizaciones, PDF, email y respuesta a clientes.
+
+- R3.7.1: nueva URL oficial de Google Apps Script integrada en Web, CPANEL y AS Virtual Oficina.
+
+## R3.7.2 - Loader global CPANEL + WhatsApp PDF
+- Los botones que ejecutan operaciones en CPANEL muestran loader y quedan temporalmente bloqueados para evitar doble clic.
+- Confirmación visual con check verde en operaciones exitosas y X roja cuando ocurre un error.
+- Aplicado a Productos, Categorías, Carrusel, Configuración, eliminar, reintentar conexión, cotizaciones PDF, correo, WhatsApp, respuestas y sugerencias de AS Virtual.
+- Cotizaciones: nuevo botón "Generar y WhatsApp".
+- Cotizaciones: botón "WhatsApp PDF" en el historial.
+- Con WhatsApp Business Cloud API configurada, el PDF se envía como documento directamente al cliente.
+- Sin WhatsApp Business Cloud API, se abre WhatsApp con el mensaje y enlace público al PDF preparado.
+- La integración de WhatsApp Business se configura desde Configuración del CPANEL (Phone Number ID, versión Graph y Access Token).
+- Después de reemplazar SERVICIOS_INFORMATICOS_AS.gs es obligatorio crear una nueva versión del Web App de Apps Script.
+
+- R3.7.3: nueva URL oficial de Google Apps Script integrada en todos los módulos y flujos de AS Virtual Oficina.
