@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="preload" as="image" href="logo-as-icon.webp">
-  <link rel="stylesheet" href="styles.min.css"><link rel="stylesheet" href="cpanel.min.css">
+  <link rel="stylesheet" href="styles.min.css?v=3.9.0"><link rel="stylesheet" href="cpanel.min.css?v=3.9.0">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
@@ -43,6 +43,7 @@
       <button data-view="requests" data-module="requests"><i class="bi bi-clipboard-data"></i> Solicitudes</button>
       <button data-view="virtual" data-module="virtual"><i class="bi bi-robot"></i> AS Virtual</button>
       <button data-view="office" data-module="office"><i class="bi bi-building-gear"></i> Oficina Virtual</button>
+      <button data-view="content" data-module="content"><i class="bi bi-pencil-square"></i> Contenido Web</button>
       <button data-view="users" data-module="users"><i class="bi bi-people"></i> Usuarios y permisos</button>
       <button data-view="settings" data-module="settings"><i class="bi bi-gear"></i> Configuración</button>
     </nav>
@@ -149,6 +150,24 @@
     </section>
 
 
+
+    <section class="admin-view" id="view-content">
+      <div class="admin-card cms-admin-card">
+        <div class="card-head">
+          <div><span class="eyebrow">CONTENIDO WEB</span><h2>Textos, botones y módulos</h2><p class="office-intro">Edita desde aquí los textos visibles de la web. La página pública trabaja con memoria local y solo consulta una versión liviana al cargar o navegar; si no hay cambios, no vuelve a descargar todo.</p></div>
+          <div class="cms-card-actions"><a class="btn btn-light" href="index.html" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Vista previa</a><button class="btn btn-primary" id="saveWebContent"><i class="bi bi-cloud-arrow-up"></i> Publicar cambios</button></div>
+        </div>
+        <div class="cms-status-strip">
+          <span><i class="bi bi-device-ssd"></i><strong>Memoria local</strong><small>La web abre inmediatamente con el último contenido guardado.</small></span>
+          <span><i class="bi bi-arrow-repeat"></i><strong>Sin polling</strong><small>No se consulta el servidor a cada rato.</small></span>
+          <span><i class="bi bi-lightning-charge"></i><strong>Actualización inteligente</strong><small>Solo descarga cambios cuando detecta una nueva versión.</small></span>
+        </div>
+        <div class="admin-toolbar cms-toolbar"><input id="webContentSearch" placeholder="Buscar texto, botón o módulo..."><select id="webContentGroup"><option value="">Todos los módulos</option></select><button class="btn btn-light" id="resetWebContentFilter" type="button"><i class="bi bi-x-circle"></i> Limpiar filtro</button></div>
+        <div class="cms-editor-grid" id="webContentEditor"></div>
+        <div class="cms-sticky-save"><span id="webContentDirtyText">Sin cambios pendientes</span><button class="btn btn-primary" id="saveWebContentBottom"><i class="bi bi-cloud-arrow-up"></i> Publicar cambios</button></div>
+      </div>
+    </section>
+
     <section class="admin-view" id="view-users">
       <div class="admin-card">
         <div class="card-head"><div><span class="eyebrow">SEGURIDAD</span><h2>Usuarios y permisos</h2><p class="office-intro">Controla quién puede entrar al CPANEL y qué módulos puede ver, editar o eliminar.</p></div><button class="btn btn-primary" id="newAdminUser"><i class="bi bi-person-plus"></i> Nuevo usuario</button></div>
@@ -205,5 +224,5 @@
 <div class="admin-menu-overlay" id="adminMenuOverlay" aria-hidden="true"></div>
 <div class="admin-notification-popups" id="adminNotificationPopups" aria-live="polite"></div>
 <div class="toast" id="adminToast"></div>
-<script src="config.min.js"></script><script src="api.min.js"></script><script src="cpanel.min.js"></script>
+<script src="config.min.js?v=3.9.0"></script><script src="api.min.js?v=3.9.0"></script><script src="cms-defaults.min.js?v=3.9.0"></script><script src="cpanel.min.js?v=3.9.0"></script>
 </body></html>

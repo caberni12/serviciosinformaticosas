@@ -1,0 +1,23 @@
+SERVICIOS INFORMÁTICOS AS - R3.9.0
+==================================
+
+NUEVO: CPANEL COMO GESTOR REAL DE CONTENIDO WEB (CMS)
+
+- Nuevo módulo CPANEL: Contenido Web.
+- Controla textos, títulos, botones, etiquetas, placeholders, navegación, módulos, footer, AS Virtual y SEO.
+- 266 textos base administrables sin editar código.
+- Solo se guardan los textos modificados; los textos originales permanecen como valores por defecto locales.
+- Nueva hoja BD: CONTENIDO_WEB.
+- Nueva versión pública ligera: PUBLIC_SITE_VERSION.
+- La web carga primero desde localStorage y NO espera a Google Apps Script.
+- La web NO hace polling constante.
+- Al abrir/recargar consulta una versión liviana; solo descarga bootstrap si hubo cambios.
+- Al navegar, hace una comprobación liviana de versión; solo evita duplicados durante 1,2 segundos.
+- Productos, categorías, banners, configuración y Contenido Web actualizan la versión pública automáticamente.
+- Sincronización automática de notificaciones CPANEL optimizada: usa endpoint liviano adminNotifications, no adminBootstrap completo cada 15 s.
+- Carpeta SUBIR_A_GITHUB incluida dentro del proyecto completo.
+
+IMPORTANTE
+-----------
+Reemplazar el único GOOGLE_APPS_SCRIPT/SERVICIOS_INFORMATICOS_AS.gs y desplegar una NUEVA VERSIÓN del Web App.
+La hoja CONTENIDO_WEB ya forma parte del esquema y también puede ser creada/migrada automáticamente.
