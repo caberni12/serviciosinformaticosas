@@ -859,3 +859,49 @@ body.theme-light .admin-module-sync{color:#fff;border-color:rgba(11,124,243,.18)
 .request-result-count{margin-left:auto;padding:8px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted);font-size:10px;font-weight:800;white-space:nowrap}
 body.theme-light .request-result-count{border-color:rgba(15,72,120,.12);color:#567087;background:#f8fbfe}
 @media(max-width:620px){.requests-toolbar #requestSearch,.requests-toolbar #requestDate,.requests-toolbar .btn{width:100%;min-width:0}.request-result-count{margin-left:0;align-self:flex-start}}
+
+
+/* R3.13.6 - Notificaciones de cotización AS Virtual */
+.admin-notification-item.is-quote .notification-item-icon,
+.admin-notification-popup.is-quote .notification-popup-icon{
+  color:#e53935;
+  background:rgba(229,57,53,.09);
+  border-color:rgba(229,57,53,.18);
+}
+.admin-notification-item.is-quote.is-unread{
+  box-shadow:inset 3px 0 0 rgba(229,57,53,.75);
+}
+
+
+/* R3.13.7 - Resumen con barras de progreso */
+.summary-progress-row{display:grid;gap:8px;padding:10px 0;border-bottom:1px solid rgba(92,132,168,.10)}
+.summary-progress-row:last-child{border-bottom:0}
+.summary-progress-copy{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.summary-progress-copy span{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.summary-progress-copy span i{color:#00aeea;width:16px;text-align:center}
+.summary-progress-copy strong{font:800 12px Orbitron,sans-serif;color:var(--text)}
+.summary-progress-track{height:8px;border-radius:999px;background:rgba(40,112,168,.09);overflow:hidden;box-shadow:inset 0 0 0 1px rgba(46,133,194,.06)}
+.summary-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#0d74c7,#00bce8);transition:width .35s ease;min-width:0}
+body.theme-light .summary-progress-track{background:#eaf3fa}
+
+/* R3.13.7 - Importación masiva de productos */
+.card-head-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bulk-import-panel{margin:14px 0 16px;padding:16px;border:1px solid var(--line);border-radius:18px;background:rgba(15,128,220,.035)}
+.bulk-import-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.bulk-import-head h3{margin:3px 0 4px;font-size:18px}.bulk-import-head p{margin:0;color:var(--muted);font-size:11px}
+.bulk-import-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);gap:12px}
+.bulk-drop-zone{position:relative;display:grid;place-items:center;text-align:center;gap:5px;min-height:142px;padding:18px;border:1px dashed rgba(0,174,234,.42);border-radius:16px;background:rgba(0,174,234,.04);cursor:pointer}
+.bulk-drop-zone:hover{background:rgba(0,174,234,.075)}
+.bulk-drop-zone i{font-size:27px;color:#00aeea}.bulk-drop-zone strong{font-size:13px}.bulk-drop-zone span{font-size:10px;color:var(--muted)}
+.bulk-drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.bulk-import-help{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;padding:14px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid var(--line)}
+.bulk-import-help strong{font-size:12px}.bulk-import-help span{font-size:10px;line-height:1.5;color:var(--muted)}
+.bulk-import-status{margin:12px 0;padding:10px 12px;border-radius:12px;background:rgba(0,174,234,.055);font-size:10.5px;color:var(--muted)}
+.bulk-import-status strong{color:var(--text)}.bulk-import-preview{max-height:330px}.bulk-import-actions{margin-top:12px}
+body.theme-light .bulk-import-panel{background:#f8fcff;border-color:rgba(15,72,120,.11)}
+body.theme-light .bulk-import-help{background:#fff;border-color:rgba(15,72,120,.10)}
+@media(max-width:760px){
+  .bulk-import-grid{grid-template-columns:1fr}
+  .card-head-actions{width:100%}.card-head-actions .btn{flex:1}
+  .bulk-import-actions{display:grid;grid-template-columns:1fr}
+}

@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="preload" as="image" href="logo-as-icon.webp">
-  <link rel="stylesheet" href="styles.min.css?v=3.13.5"><link rel="stylesheet" href="cpanel.min.css?v=3.13.5">
+  <link rel="stylesheet" href="styles.min.css?v=3.13.8"><link rel="stylesheet" href="cpanel.min.css?v=3.13.8">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
@@ -77,7 +77,7 @@
     </section>
 
     <section class="admin-view" id="view-products">
-      <div class="admin-card"><div class="card-head"><div><span class="eyebrow">Catálogo</span><h2>Productos</h2></div><button class="btn btn-primary" id="newProduct">+ Nuevo producto</button></div>
+      <div class="admin-card"><div class="card-head"><div><span class="eyebrow">Catálogo</span><h2>Productos</h2></div><div class="card-head-actions"><button class="btn btn-light" id="bulkImportProducts"><i class="bi bi-file-earmark-arrow-up"></i> Importar masivo</button><button class="btn btn-primary" id="newProduct">+ Nuevo producto</button></div></div>
         <div class="editor hidden" id="productEditor"><input type="hidden" id="pId"><input type="hidden" id="pImageId"><input type="hidden" id="pImageUrl">
           <div class="form-grid"><input id="pName" placeholder="Nombre"><input id="pPrice" type="number" placeholder="Precio"><label class="admin-field"><span>Categoría</span><select id="pCategory"><option value="">Cargando categorías...</option></select></label><input id="pStock" type="number" placeholder="Stock"><input id="pOccasion" placeholder="Ocasión"><label class="file-field">Foto<input id="pImage" type="file" accept="image/*"></label><textarea id="pDescription" class="span-2" placeholder="Descripción"></textarea></div>
           <div class="available-categories-panel">
@@ -86,6 +86,31 @@
           </div>
           <label class="check"><input id="pFeatured" type="checkbox"> Mostrar como destacado</label>
           <div class="editor-actions"><button class="btn btn-primary" id="saveProduct">Guardar</button><button class="btn btn-light" data-cancel="productEditor">Cancelar</button></div>
+        </div>
+        <div class="bulk-import-panel hidden" id="bulkProductImportPanel">
+          <div class="bulk-import-head">
+            <div><span class="eyebrow">CARGA RÁPIDA</span><h3>Importación masiva de productos</h3><p>Importa hasta 1.000 productos en una sola operación. Acepta CSV y Excel .xlsx/.xls.</p></div>
+            <button type="button" class="icon-btn" id="closeBulkProductImport" aria-label="Cerrar"><i class="bi bi-x-lg"></i></button>
+          </div>
+          <div class="bulk-import-grid">
+            <label class="bulk-drop-zone" for="bulkProductFile">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <strong>Seleccionar archivo</strong>
+              <span>CSV, XLSX o XLS · máximo 1.000 filas</span>
+              <input id="bulkProductFile" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+            </label>
+            <div class="bulk-import-help">
+              <strong>Columnas admitidas</strong>
+              <span>nombre, descripcion, precio, categoria_nombre, stock, image_url, destacado, activo, ocasion, orden e id opcional.</span>
+              <button type="button" class="btn btn-light" id="downloadProductTemplate"><i class="bi bi-download"></i> Descargar plantilla CSV</button>
+            </div>
+          </div>
+          <div class="bulk-import-status" id="bulkProductStatus">Selecciona un archivo para revisar los productos antes de importarlos.</div>
+          <div class="bulk-import-preview table-wrap" id="bulkProductPreview"></div>
+          <div class="editor-actions bulk-import-actions">
+            <button class="btn btn-primary" id="confirmBulkProductImport" disabled><i class="bi bi-lightning-charge-fill"></i> Importar lote</button>
+            <button class="btn btn-light" id="cancelBulkProductImport">Cancelar</button>
+          </div>
         </div>
         <div class="admin-toolbar"><input id="productSearch" placeholder="Buscar producto..."><select id="productFilter"><option value="">Todas las categorías</option></select></div>
         <div class="table-wrap" id="productsTable"></div>
@@ -250,5 +275,5 @@
 </div>
 
 <div class="toast" id="adminToast"></div>
-<script src="config.min.js?v=3.13.5"></script><script src="api.min.js?v=3.13.5"></script><script src="cms-defaults.min.js?v=3.13.5"></script><script src="cpanel.min.js?v=3.13.5"></script>
+<script src="config.min.js?v=3.13.8"></script><script src="api.min.js?v=3.13.8"></script><script src="cms-defaults.min.js?v=3.13.8"></script><script src="cpanel.min.js?v=3.13.8"></script>
 </body></html>

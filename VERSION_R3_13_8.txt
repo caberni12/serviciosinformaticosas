@@ -1,0 +1,5 @@
+SERVICIOS INFORMATICOS AS - R3.13.8
+Nueva URL oficial de Google Apps Script integrada.
+API_URL=https://script.google.com/macros/s/AKfycbxiJfdx2srM5KiYBVATUKEC_7rHt8QnXng6hZtu1xtRhjZbQyVMP-lXK21_2mseZxAVJQ/exec
+Mantiene sesión persistente 24h, CPANEL rápido, Dashboard con barras, importación masiva de productos,
+AS Virtual LOCAL_ONLY, cotizaciones PDF y campanita de cotizaciones.
