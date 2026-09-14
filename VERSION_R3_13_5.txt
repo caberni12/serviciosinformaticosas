@@ -1,0 +1,7 @@
+SERVICIOS INFORMATICOS AS - R3.13.5
+AS Virtual / Cotizar corregido:
+- formulario con scroll interno
+- footer de total + Generar cotizacion siempre visible
+- modo cotizacion reduce el chat para aprovechar el espacio
+- responsive para pantallas bajas y moviles
+- sin cambios de Apps Script / backend
