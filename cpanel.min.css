@@ -849,3 +849,13 @@ body.theme-light .admin-module-sync{color:#fff;border-color:rgba(11,124,243,.18)
 .admin-login-server-status.is-offline span{background:#e45050;box-shadow:0 0 0 4px rgba(228,80,80,.12)}
 .admin-login-server-status.is-checking span{animation:serverPulse 1s ease-in-out infinite}
 @keyframes serverPulse{50%{opacity:.35;transform:scale(.75)}}
+
+
+/* R3.13.2 - filtros rápidos Solicitudes */
+.requests-toolbar{align-items:center;flex-wrap:wrap}
+.requests-toolbar #requestSearch{min-width:280px}
+.requests-toolbar #requestDate{min-width:170px}
+.requests-toolbar .btn{min-height:42px;white-space:nowrap}
+.request-result-count{margin-left:auto;padding:8px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted);font-size:10px;font-weight:800;white-space:nowrap}
+body.theme-light .request-result-count{border-color:rgba(15,72,120,.12);color:#567087;background:#f8fbfe}
+@media(max-width:620px){.requests-toolbar #requestSearch,.requests-toolbar #requestDate,.requests-toolbar .btn{width:100%;min-width:0}.request-result-count{margin-left:0;align-self:flex-start}}

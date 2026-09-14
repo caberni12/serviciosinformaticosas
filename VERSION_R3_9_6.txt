@@ -1,3 +1,3 @@
 SERVICIOS INFORMATICOS AS - R3.9.6
 Nueva URL oficial de Google Apps Script integrada.
-https://script.google.com/macros/s/AKfycbz5i0ZihjRVuRJuYsNF6byfio7U-cSpbcR-wn1bVELEAbw8U906iG_qWy7vXvob0a3IMg/exec
+https://script.google.com/macros/s/AKfycbyQdI-kLtm94qN65m_U3l7YhxkbAFaAkqis-scCu8PLmNDBFbtL3AYxGIatUvx9fJpCtw/exec

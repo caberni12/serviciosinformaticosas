@@ -1,0 +1,6 @@
+SERVICIOS INFORMATICOS AS - R3.13.3
+Nueva URL oficial de Google Apps Script integrada.
+API_URL=https://script.google.com/macros/s/AKfycbyQdI-kLtm94qN65m_U3l7YhxkbAFaAkqis-scCu8PLmNDBFbtL3AYxGIatUvx9fJpCtw/exec
+Mantiene AS Virtual LOCAL_ONLY con generación de cotizaciones PDF desde el chat.
+Mantiene Solicitudes con buscador + filtro por fecha.
+Mantiene CPANEL FAST_CACHE_SELECTIVE, doble transporte y sin IA externa.
