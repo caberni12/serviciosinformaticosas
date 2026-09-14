@@ -1,0 +1,6 @@
+SERVICIOS INFORMATICOS AS - R3.13.4
+CPANEL STYLES/PACKAGING FIX
+- Corrige referencias de cpanel.html a assets .min reales.
+- Corrige GitHub y Android/iOS WebView.
+- SUBIR_A_GITHUB queda limpio, sin versiones historicas.
+- Mantiene R3.13.3 funcional: AS Virtual cotiza, Solicitudes filtros y CPANEL FAST.
