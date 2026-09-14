@@ -1,0 +1,7 @@
+SERVICIOS INFORMATICOS AS - R3.13.9
+CORRECCION DASHBOARD RESUMEN
+- Las barras de progreso ya no se destruyen y recrean en cada actualización.
+- El Resumen se crea una sola vez y solo actualiza números y ancho de barra.
+- Se elimina el efecto de parpadeo / aparecer-desaparecer.
+- Las barras permanecen visibles aunque el valor sea 0.
+- Se mantiene sesión persistente, CPANEL rápido, importación masiva y campanita.

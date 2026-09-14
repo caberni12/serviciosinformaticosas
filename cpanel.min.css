@@ -905,3 +905,28 @@ body.theme-light .bulk-import-help{background:#fff;border-color:rgba(15,72,120,.
   .card-head-actions{width:100%}.card-head-actions .btn{flex:1}
   .bulk-import-actions{display:grid;grid-template-columns:1fr}
 }
+
+
+/* R3.13.9 - Dashboard Resumen estable, sin parpadeo */
+.summary-progress-row{
+  min-height:56px;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+.summary-progress-track{
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  min-height:8px;
+}
+.summary-progress-track span{
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  transition:width .28s ease !important;
+  animation:none !important;
+  will-change:width;
+}
+#dashboardSummary{
+  min-height:320px;
+}
