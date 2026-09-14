@@ -930,3 +930,19 @@ body.theme-light .bulk-import-help{background:#fff;border-color:rgba(15,72,120,.
 #dashboardSummary{
   min-height:320px;
 }
+
+
+/* R3.13.10 - ID automático en importación masiva */
+.bulk-import-help::after{
+  content:"ID de producto: generado automáticamente por el sistema";
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:2px;
+  padding:7px 9px;
+  border-radius:10px;
+  background:rgba(0,174,234,.07);
+  color:#0aa4dc;
+  font-size:9.5px;
+  font-weight:800;
+}
