@@ -1,0 +1,4 @@
+SERVICIOS INFORMATICOS AS - R3.12.5
+Nueva URL oficial de Google Apps Script integrada.
+API_URL=https://script.google.com/macros/s/AKfycbwMFYE_jp1wdY7-Sv120h23a61H_baFaODn7zWY7f_PSIn-TynhOOCOTQahoG9WirIuig/exec
+Mantiene Login Transport Fix, Gemini, Drive centralizado, Mobile Cards y AS CPANEL.

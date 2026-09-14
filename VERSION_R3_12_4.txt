@@ -1,0 +1,7 @@
+SERVICIOS INFORMATICOS AS - R3.12.4
+Login CPANEL transport fix.
+API_URL=https://script.google.com/macros/s/AKfycbwMFYE_jp1wdY7-Sv120h23a61H_baFaODn7zWY7f_PSIn-TynhOOCOTQahoG9WirIuig/exec
+- La URL raiz ahora responde ONLINE y no ACCION_NO_VALIDA.
+- HEALTH informa estado de USUARIOS y seguridad sin exponer secretos.
+- El login ya no se bloquea si la comprobacion previa HEALTH falla.
+- Se mantiene login real por POST y confirmacion independiente.

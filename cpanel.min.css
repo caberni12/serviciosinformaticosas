@@ -838,3 +838,14 @@ body.theme-light .admin-module-sync{color:#fff;border-color:rgba(11,124,243,.18)
     grid-column:auto!important;
   }
 }
+
+
+/* R3.12.2 - Estado de conexión del login */
+.admin-login-server-status{margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:34px;padding:8px 10px;border-radius:11px;font-size:11px;border:1px solid rgba(105,160,200,.22);background:rgba(120,160,190,.07);color:#6b8298}
+.admin-login-server-status span{width:8px;height:8px;border-radius:50%;background:#8ba0b2;box-shadow:0 0 0 4px rgba(139,160,178,.1)}
+.admin-login-server-status.is-online{color:#13844a;background:rgba(23,179,94,.08);border-color:rgba(23,179,94,.18)}
+.admin-login-server-status.is-online span{background:#20c66d;box-shadow:0 0 0 4px rgba(32,198,109,.12)}
+.admin-login-server-status.is-offline{color:#c14343;background:rgba(220,65,65,.07);border-color:rgba(220,65,65,.18)}
+.admin-login-server-status.is-offline span{background:#e45050;box-shadow:0 0 0 4px rgba(228,80,80,.12)}
+.admin-login-server-status.is-checking span{animation:serverPulse 1s ease-in-out infinite}
+@keyframes serverPulse{50%{opacity:.35;transform:scale(.75)}}

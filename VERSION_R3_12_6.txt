@@ -1,0 +1,8 @@
+SERVICIOS INFORMATICOS AS - R3.12.6
+CPANEL LOGIN DUAL TRANSPORT FIX
+API_URL=https://script.google.com/macros/s/AKfycbwMFYE_jp1wdY7-Sv120h23a61H_baFaODn7zWY7f_PSIn-TynhOOCOTQahoG9WirIuig/exec
+- GET/JSONP health se mantiene.
+- Login intenta iframe POST y, si no confirma, usa POST no-cors de respaldo.
+- La contraseña nunca se envia en URL/GET.
+- Apps Script acepta transport=iframe y transport=blind y registra requestStatus.
+- health expone api_revision R3.12.6 para comprobar el despliegue activo.

@@ -1,0 +1,3 @@
+SERVICIOS INFORMATICOS AS - R3.12.2
+Correccion acceso CPANEL: diagnostico de servidor, mensajes de error precisos y funciones manuales diagnosticarAccesoCPANEL() / restablecerClaveAdministradorCPANEL().
+Mantiene URL oficial actual, Gemini, GPS animado, Drive centralizado y Mobile Cards UI.
