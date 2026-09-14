@@ -625,3 +625,216 @@ body.admin-splash-open{overflow:hidden}
 body.theme-light .admin-module-sync{color:#fff;border-color:rgba(11,124,243,.18)}
 @media(max-width:1180px){.admin-module-sync span{display:none}.admin-module-sync{width:42px;padding:0;justify-content:center}}
 @media(max-width:560px){.admin-module-sync{width:38px;min-height:38px;border-radius:11px}.admin-module-sync i{font-size:16px}}
+
+
+/* ================================================================
+   R3.11.6 - CPANEL MOBILE CARDS UI
+   Escritorio = tabla / Mobile = tarjetas
+   ================================================================ */
+@media (max-width: 820px){
+  .admin-table.admin-responsive-table{
+    display:block;
+    width:100%;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+  .admin-table.admin-responsive-table thead{
+    display:none!important;
+  }
+  .admin-table.admin-responsive-table tbody{
+    display:grid!important;
+    grid-template-columns:1fr;
+    gap:14px;
+    width:100%;
+  }
+  .admin-table.admin-responsive-table tbody tr{
+    display:block!important;
+    width:100%;
+    overflow:hidden;
+    padding:14px;
+    border:1px solid rgba(68,161,224,.22)!important;
+    border-radius:18px;
+    background:linear-gradient(145deg,rgba(9,27,45,.98),rgba(5,18,31,.96));
+    box-shadow:0 14px 34px rgba(0,0,0,.18);
+  }
+  .admin-table.admin-responsive-table tbody tr:hover{
+    transform:none!important;
+    background:linear-gradient(145deg,rgba(10,31,52,.99),rgba(5,19,33,.98));
+  }
+  .admin-table.admin-responsive-table tbody td{
+    display:grid!important;
+    grid-template-columns:minmax(88px,.75fr) minmax(0,1.55fr);
+    align-items:start;
+    gap:12px;
+    width:100%!important;
+    min-width:0!important;
+    padding:10px 2px!important;
+    border:0!important;
+    border-bottom:1px solid rgba(126,188,226,.12)!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere;
+    text-align:left!important;
+  }
+  .admin-table.admin-responsive-table tbody td:last-child{
+    border-bottom:0!important;
+    padding-bottom:2px!important;
+  }
+  .admin-table.admin-responsive-table tbody td::before{
+    content:attr(data-label);
+    min-width:0;
+    padding-top:2px;
+    font-size:10px;
+    line-height:1.35;
+    font-weight:900;
+    letter-spacing:.075em;
+    text-transform:uppercase;
+    color:#60c9ff;
+  }
+  .admin-table.admin-responsive-table tbody td[data-label="Imagen"]{
+    display:flex!important;
+    align-items:center;
+    justify-content:center;
+    min-height:96px;
+    padding:0 0 13px!important;
+  }
+  .admin-table.admin-responsive-table tbody td[data-label="Imagen"]::before{
+    display:none;
+  }
+  .admin-table.admin-responsive-table tbody td[data-label="Imagen"] img,
+  .admin-table.admin-responsive-table tbody td[data-label="Imagen"] .admin-thumb,
+  .admin-table.admin-responsive-table tbody td[data-label="Imagen"] .product-admin-thumb{
+    width:88px!important;
+    height:88px!important;
+    max-width:88px!important;
+    border-radius:16px!important;
+    object-fit:cover!important;
+  }
+  .admin-table.admin-responsive-table tbody td[data-label="Producto"] strong,
+  .admin-table.admin-responsive-table tbody td[data-label="Categoría"] strong,
+  .admin-table.admin-responsive-table tbody td[data-label="Cliente"] strong,
+  .admin-table.admin-responsive-table tbody td[data-label="Usuario"] strong,
+  .admin-table.admin-responsive-table tbody td[data-label="Título"] strong{
+    font-size:15px;
+    line-height:1.35;
+  }
+  .admin-table.admin-responsive-table tbody td small{
+    display:inline-block;
+    margin-top:3px;
+    line-height:1.45;
+  }
+  .admin-table.admin-responsive-table .row-actions,
+  .admin-table.admin-responsive-table .request-quick-actions{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px!important;
+    width:100%;
+  }
+  .admin-table.admin-responsive-table .row-actions button,
+  .admin-table.admin-responsive-table .request-quick-actions button{
+    width:100%;
+    min-height:42px;
+    justify-content:center;
+    padding:9px 10px!important;
+  }
+  .admin-table.admin-responsive-table .status-select{
+    width:100%!important;
+    min-width:0!important;
+    min-height:42px;
+  }
+  .admin-table.admin-responsive-table .office-pdf-link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    min-height:40px;
+    padding:8px 12px;
+    border-radius:10px;
+  }
+  .admin-table.admin-responsive-table .admin-empty-row{
+    min-height:110px;
+    display:grid!important;
+    place-items:center;
+  }
+  .admin-table.admin-responsive-table .admin-empty-row td{
+    display:block!important;
+    border:0!important;
+    text-align:center!important;
+    padding:28px 10px!important;
+  }
+  .admin-table.admin-responsive-table .admin-empty-row td::before{
+    display:none;
+  }
+
+  /* AS Virtual ya era tarjeta: la dejamos con la misma escala táctil */
+  .virtual-card-list{
+    gap:14px!important;
+  }
+  .virtual-admin-card{
+    border-radius:18px!important;
+    padding:15px!important;
+  }
+  .virtual-admin-actions{
+    display:grid!important;
+    grid-template-columns:1fr 1fr;
+    gap:8px!important;
+  }
+  .virtual-admin-actions .status-select{
+    grid-column:1/-1;
+    min-height:42px;
+    width:100%;
+  }
+  .virtual-admin-actions button{
+    width:100%;
+    min-height:42px;
+    justify-content:center;
+  }
+  .virtual-admin-actions button:last-child:nth-child(even){
+    grid-column:1/-1;
+  }
+}
+
+/* Tema claro: tarjetas móviles limpias y legibles */
+@media (max-width: 820px){
+  body.theme-light .admin-table.admin-responsive-table tbody tr{
+    background:linear-gradient(145deg,#ffffff,#f4f9fd)!important;
+    border-color:#cfe4f3!important;
+    box-shadow:0 10px 28px rgba(18,67,101,.09)!important;
+  }
+  body.theme-light .admin-table.admin-responsive-table tbody tr:hover{
+    background:linear-gradient(145deg,#ffffff,#f2f8fc)!important;
+  }
+  body.theme-light .admin-table.admin-responsive-table tbody td{
+    border-bottom-color:#deebf4!important;
+    color:#17324a!important;
+  }
+  body.theme-light .admin-table.admin-responsive-table tbody td::before{
+    color:#0878bd!important;
+  }
+}
+
+/* Teléfonos angostos: etiqueta arriba, contenido debajo */
+@media (max-width: 430px){
+  .admin-table.admin-responsive-table tbody tr{
+    padding:12px!important;
+    border-radius:16px;
+  }
+  .admin-table.admin-responsive-table tbody td{
+    grid-template-columns:1fr;
+    gap:5px;
+    padding:9px 1px!important;
+  }
+  .admin-table.admin-responsive-table tbody td::before{
+    padding-top:0;
+  }
+  .admin-table.admin-responsive-table .row-actions,
+  .admin-table.admin-responsive-table .request-quick-actions,
+  .virtual-admin-actions{
+    grid-template-columns:1fr!important;
+  }
+  .virtual-admin-actions .status-select,
+  .virtual-admin-actions button:last-child:nth-child(even){
+    grid-column:auto!important;
+  }
+}

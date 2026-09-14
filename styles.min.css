@@ -1157,3 +1157,46 @@ body.theme-light .hero-brand-visual img.hero-device-shot{box-shadow:0 26px 65px 
   .site-footer h4{font-size:9px!important}
   .site-footer a,.site-footer button,.site-footer span{font-size:8.7px!important}
 }
+
+
+/* ================================================================
+   R3.12.0 - HERO GPS EN MOVIMIENTO
+   ================================================================ */
+.hero-gps-visual{perspective:1200px;isolation:isolate;overflow:visible}
+.hero-gps-visual .hero-device-shot{
+  animation:asGpsFloat 5.8s ease-in-out infinite;
+  transform-origin:center 58%;
+  will-change:transform,filter;
+}
+.hero-gps-sweep{
+  position:absolute;z-index:1;width:430px;height:430px;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0 72%,rgba(24,230,255,.18) 84%,rgba(18,134,255,.04) 92%,transparent 100%);
+  filter:blur(.2px);opacity:.75;animation:asGpsSweep 5.5s linear infinite;pointer-events:none
+}
+.hero-gps-sweep:after{
+  content:"";position:absolute;inset:48%;border-radius:50%;
+  box-shadow:0 0 0 18px rgba(24,230,255,.10),0 0 0 40px rgba(24,230,255,.055),0 0 0 70px rgba(24,230,255,.025);
+  animation:asGpsPulse 2.8s ease-out infinite
+}
+.hero-gps-orbit{position:absolute;z-index:3;border:1px solid rgba(36,217,255,.28);border-radius:50%;pointer-events:none;animation:asGpsOrbit 13s linear infinite}
+.hero-gps-orbit span{position:absolute;width:9px;height:9px;border-radius:50%;background:#20e7ff;box-shadow:0 0 18px #20e7ff,0 0 34px rgba(24,126,255,.65)}
+.hero-gps-orbit.orbit-one{width:390px;height:270px;transform:rotate(-10deg)}
+.hero-gps-orbit.orbit-one span{left:14%;top:8%}
+.hero-gps-orbit.orbit-two{width:335px;height:390px;animation-duration:17s;animation-direction:reverse;opacity:.72}
+.hero-gps-orbit.orbit-two span{right:4%;top:42%}
+.hero-gps-pin,.hero-gps-signal{position:absolute;z-index:4;color:#20e7ff;text-shadow:0 0 12px rgba(32,231,255,.95),0 0 26px rgba(7,111,255,.7);pointer-events:none}
+.hero-gps-pin{font-size:20px;animation:asGpsPin 2.3s ease-in-out infinite}
+.gps-pin-a{left:9%;top:22%;animation-delay:.1s}.gps-pin-b{right:7%;top:47%;animation-delay:.8s}.gps-pin-c{left:16%;bottom:15%;animation-delay:1.4s}
+.hero-gps-signal{right:10%;top:13%;font-size:23px;animation:asGpsSignal 1.8s ease-in-out infinite}
+.gps-chip{animation:asChipHover 4.6s ease-in-out infinite}.chip-two.gps-chip{animation-delay:.7s}.chip-three.gps-chip{animation-delay:1.4s}
+.virtual-ai-thinking{margin-left:7px;color:#64dfff;font-size:9px;letter-spacing:.05em;white-space:nowrap}
+@keyframes asGpsFloat{0%,100%{transform:translate3d(0,0,0) rotateX(0) rotateY(0);filter:brightness(1)}50%{transform:translate3d(0,-10px,0) rotateX(1.2deg) rotateY(-1deg);filter:brightness(1.07)}}
+@keyframes asGpsSweep{to{transform:rotate(360deg)}}
+@keyframes asGpsPulse{0%{transform:scale(.7);opacity:.95}80%,100%{transform:scale(1.35);opacity:0}}
+@keyframes asGpsOrbit{to{transform:rotate(350deg)}}
+@keyframes asGpsPin{0%,100%{transform:translateY(0) scale(.92);opacity:.65}50%{transform:translateY(-9px) scale(1.15);opacity:1}}
+@keyframes asGpsSignal{0%,100%{transform:scale(.85);opacity:.55}50%{transform:scale(1.2);opacity:1}}
+@keyframes asChipHover{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media(max-width:860px){.hero-gps-sweep{width:330px;height:330px}.hero-gps-orbit.orbit-one{width:300px;height:215px}.hero-gps-orbit.orbit-two{width:260px;height:300px}.hero-gps-pin,.hero-gps-signal{display:none}}
+@media(max-width:560px){.hero-gps-sweep{width:275px;height:275px}}
+@media(prefers-reduced-motion:reduce){.hero-gps-visual .hero-device-shot,.hero-gps-sweep,.hero-gps-sweep:after,.hero-gps-orbit,.hero-gps-pin,.hero-gps-signal,.gps-chip{animation:none!important}}

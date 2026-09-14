@@ -1,4 +1,4 @@
 SERVICIOS INFORMATICOS AS - R3.11.1
 Nueva URL oficial de Google Apps Script integrada en Web, CPANEL, Android WebView e iOS WKWebView.
-API_URL=https://script.google.com/macros/s/AKfycby2-BsrbdpbMY38LEGMDadMfFS0SbYDB7akLc9dX9y68vhGMzh0am8dgdHWEHjoECjiqw/exec
+API_URL=https://script.google.com/macros/s/AKfycbwBEFIlm2Sp2mu17J-Hq2oqCWNlfvr29R4yrRvSosttj4HxbhKsdQwNNA77F_dHCiIF7g/exec
 Mantiene alertas push, Drive centralizado, sincronización por módulo y CPANEL optimizado.
