@@ -1,0 +1,6 @@
+SERVICIOS INFORMATICOS AS - R3.13.0 STABLE LOCAL
+AS Virtual funciona en modo LOCAL_ONLY, sin IA externa ni API keys.
+Se retiraron del CPANEL todos los controles y llamadas de IA externa.
+Mantiene FAST LOGIN, doble transporte, Mobile Cards, GPS Hero, Push y AS CPANEL.
+API_URL=https://script.google.com/macros/s/AKfycbz5i0ZihjRVuRJuYsNF6byfio7U-cSpbcR-wn1bVELEAbw8U906iG_qWy7vXvob0a3IMg/exec
+HEALTH: api_revision=R3.13.0 / as_virtual_mode=LOCAL_ONLY.

@@ -1,0 +1,5 @@
+SERVICIOS INFORMATICOS AS - R3.13.1 STABLE LOCAL
+Nueva URL oficial de Google Apps Script integrada.
+API_URL=https://script.google.com/macros/s/AKfycbz5i0ZihjRVuRJuYsNF6byfio7U-cSpbcR-wn1bVELEAbw8U906iG_qWy7vXvob0a3IMg/exec
+AS Virtual permanece LOCAL_ONLY, sin Gemini ni IA externa.
+Mantiene FAST LOGIN, doble transporte, Mobile Cards, GPS Hero, Push y AS CPANEL.
