@@ -8,10 +8,11 @@
   <meta name="referrer" content="no-referrer">
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="preload" as="image" href="logo-as-icon.webp">
-  <link rel="stylesheet" href="styles.min.css?v=3.13.11"><link rel="stylesheet" href="cpanel.min.css?v=3.13.11">
+  <link rel="stylesheet" href="styles.min.css?v=3.14.0"><link rel="stylesheet" href="cpanel.min.css?v=3.14.0">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="enhancements.css?v=3.14.0">
 </head>
 <body class="admin-body theme-light" data-theme="light">
 
@@ -37,6 +38,7 @@
     <div class="admin-brand admin-brand-single"><img id="adminLogo" src="logo-as-icon.webp" width="180" height="180" decoding="async" alt="SERVICIOS INFORMÁTICOS AS"><span>CPANEL</span></div>
     <nav class="admin-nav">
       <button class="active" data-view="dashboard" data-module="dashboard"><i class="bi bi-grid"></i> Dashboard</button>
+      <button data-view="projects" data-module="projects"><i class="bi bi-folder2-open"></i> Mis proyectos</button>
       <button data-view="products" data-module="products"><i class="bi bi-box-seam"></i> Productos</button>
       <button data-view="categories" data-module="categories"><i class="bi bi-tags"></i> Categorías</button>
       <button data-view="banners" data-module="banners"><i class="bi bi-images"></i> Carrusel</button>
@@ -74,6 +76,36 @@
         <div class="kpi-card kpi-circle"><i class="bi bi-boxes"></i><strong id="kpiStock">0</strong><span>Stock total</span></div>
       </div>
       <div class="admin-card"><h2>Resumen</h2><div id="dashboardSummary" class="summary-list"></div></div>
+    </section>
+
+    <section class="admin-view" id="view-projects">
+      <div class="admin-card">
+        <div class="card-head"><div><span class="eyebrow">PORTAFOLIO</span><h2>Mis proyectos</h2><p>Publica tus desarrollos con imagen, tecnologías, demostración y archivo descargable.</p></div><button class="btn btn-primary" id="newASProject" type="button"><i class="bi bi-plus-lg"></i> Nuevo proyecto</button></div>
+        <div class="as-admin-project-stats" id="asProjectStats"></div>
+        <div class="toolbar"><input id="asProjectAdminSearch" type="search" aria-label="Buscar en mis proyectos" placeholder="Buscar proyecto…"><select id="asProjectAdminFilter" aria-label="Filtrar publicación"><option value="">Todos</option><option value="SI">Publicados</option><option value="NO">Borradores</option></select><a class="btn btn-light" href="index.html#proyectos" target="_blank" rel="noopener">Ver portafolio <i class="bi bi-box-arrow-up-right"></i></a></div>
+        <div class="table-wrap" id="asProjectsTable"></div>
+      </div>
+      <div class="admin-card hidden" id="asProjectEditor">
+        <div class="card-head"><div><span class="eyebrow">EDITOR</span><h2 id="asProjectEditorTitle">Nuevo proyecto</h2></div><button class="btn btn-light" id="cancelASProject" type="button">Cerrar</button></div>
+        <form id="asProjectForm">
+          <input type="hidden" id="asProjectId"><input type="hidden" id="asProjectImageId"><input type="hidden" id="asProjectImageUrl"><input type="hidden" id="asProjectFileId"><input type="hidden" id="asProjectFileName">
+          <div class="form-grid as-labelled-form">
+            <label class="span-2">Nombre del proyecto *<input id="asProjectTitle" maxlength="140" required placeholder="Nombre de tu desarrollo"></label>
+            <label>Categoría<input id="asProjectCategory" maxlength="80" list="asProjectCategories" placeholder="Web, Android, sistemas…"><datalist id="asProjectCategories"><option>Desarrollo Web</option><option>Aplicación Android</option><option>Sistema de Gestión</option><option>Integraciones</option></datalist></label>
+            <label>Estado<input id="asProjectState" maxlength="80" list="asProjectStates" value="En desarrollo"><datalist id="asProjectStates"><option>En desarrollo</option><option>Disponible</option><option>Finalizado</option><option>En evolución</option></datalist></label>
+            <label class="span-2">Descripción *<textarea id="asProjectDescription" maxlength="5000" rows="5" required placeholder="Qué hace tu proyecto, para quién está pensado y sus funciones principales."></textarea></label>
+            <label class="span-2">Tecnologías<input id="asProjectTech" maxlength="500" placeholder="Android, PostgreSQL, APIs (separadas por comas)"></label>
+            <label>Enlace de demostración<input id="asProjectDemo" type="url" pattern="https://.*" placeholder="https://…"></label>
+            <label>Enlace de descarga externo<input id="asProjectDownload" type="url" pattern="https://.*" placeholder="https://… (opcional)"></label>
+            <label>Imagen del proyecto<input id="asProjectImage" type="file" accept="image/png,image/jpeg,image/webp"><small>PNG, JPG o WebP. Máximo 6 MB.</small><img class="as-upload-preview hidden" id="asProjectImagePreview" alt="Imagen del proyecto"></label>
+            <label>Archivo para descargar<input id="asProjectFile" type="file" accept=".zip,.apk,.aab,.pdf"><small>ZIP, APK, AAB o PDF. Máximo 10 MB. Para archivos más grandes usa el enlace externo.</small><span id="asProjectCurrentFile"></span><button class="as-text-button" id="removeASProjectFile" type="button">Retirar adjunto</button></label>
+            <label>Orden de aparición<input id="asProjectOrder" type="number" min="0" max="9999" value="1"></label>
+            <div class="as-project-checks"><label><input id="asProjectPublished" type="checkbox"> Publicar en la web</label><label><input id="asProjectFeatured" type="checkbox"> Destacar en el inicio</label></div>
+          </div>
+          <p class="as-publish-note"><i class="bi bi-info-circle"></i> Al publicar, la imagen y el adjunto estarán disponibles mediante enlace. Guarda como borrador si todavía no quieres compartirlos.</p>
+          <div class="editor-actions"><button class="btn btn-primary" id="saveASProject" type="submit"><i class="bi bi-check2"></i> Guardar proyecto</button><button class="btn btn-light" type="button" id="cancelASProjectBottom">Cancelar</button></div>
+        </form>
+      </div>
     </section>
 
     <section class="admin-view" id="view-products">
@@ -222,15 +254,23 @@
     <section class="admin-view" id="view-settings">
       <div class="admin-card"><span class="eyebrow">Sitio</span><h2>Configuración</h2>
         <input type="hidden" id="sLogoId">
-        <div class="form-grid"><input id="sBusiness" placeholder="Nombre / marca"><input id="sWhatsapp" placeholder="WhatsApp"><input id="sEmail" placeholder="Correo"><input id="sAddress" placeholder="Dirección / ubicación"><input id="sAssistantName" placeholder="Nombre del chatbox inteligente"><select id="sDefaultTheme"><option value="dark">Tema web por defecto: Oscuro</option><option value="light">Tema web por defecto: Claro</option></select><input id="sInstagram" placeholder="URL Instagram">
+        <div class="form-grid"><input id="sBusiness" placeholder="Nombre / marca"><input id="sWhatsapp" placeholder="WhatsApp"><label class="as-setting-label">Correo público de contacto<input id="sEmail" type="email" placeholder="Correo que verán los clientes"></label><input id="sAddress" placeholder="Dirección / ubicación"><input id="sAssistantName" placeholder="Nombre del chatbox inteligente"><select id="sDefaultTheme"><option value="dark">Tema web por defecto: Oscuro</option><option value="light">Tema web por defecto: Claro</option></select><input id="sInstagram" placeholder="URL Instagram">
 <input id="sFacebook" placeholder="URL Facebook">
 <input id="sTiktok" placeholder="URL TikTok">
 <div class="span-2" style="font-size:13px;color:#7f6a62;margin-top:-2px">
   Los iconos de Instagram, Facebook y TikTok siempre se muestran en la web. Al guardar aquí las URLs reales, quedarán enlazados automáticamente.
-</div><input id="sDelivery" type="number" placeholder="Valor despacho"><label class="file-field span-2">Logo<input id="sLogo" type="file" accept="image/*"></label></div>
+</div><input id="sDelivery" type="number" placeholder="Valor despacho"><label class="file-field span-2">Logotipo del sitio y documentos<input id="sLogo" type="file" accept="image/png,image/jpeg"><small>PNG o JPG. Se incorpora a los documentos PDF y correos. Si no subes otro, se utiliza tu logo AS actual.</small></label></div>
+        <div class="as-mail-settings">
+          <h3>Recepción de consultas</h3>
+          <p class="office-intro">Elige dónde recibir los avisos de tu sitio. Este correo se utiliza internamente y puede ser diferente del correo público.</p>
+          <div class="form-grid as-labelled-form"><label class="span-2">Correo receptor *<input id="sNotifyEmail" type="email" required maxlength="254" placeholder="serviciosinformaticosas@gmail.com"></label></div>
+          <div class="as-mail-options"><label><input id="sNotifyRequests" type="checkbox" checked> Solicitudes de cotización</label><label><input id="sNotifyOrders" type="checkbox" checked> Pedidos del catálogo</label><label><input id="sNotifyVirtual" type="checkbox" checked> Consultas enviadas desde el chat</label><label><input id="sNotifyQuotes" type="checkbox" checked> Cotizaciones creadas por clientes</label></div>
+          <p class="as-muted">Guarda la configuración antes de enviar la prueba. Los mensajes se envían desde la cuenta de Google que ejecuta el sistema.</p>
+        </div>
         <button class="btn btn-primary" id="saveSettings">Guardar configuración</button>
       </div>
 
+      <div class="admin-card"><span class="eyebrow">CORREO</span><h2>Prueba e historial de avisos</h2><div class="as-mail-status" id="asMailStatus" role="status"></div><div class="editor-actions"><button class="btn btn-primary" id="asTestEmail" type="button"><i class="bi bi-envelope-check"></i> Enviar correo de prueba</button><button class="btn btn-light" id="asRetryEmails" type="button">Reintentar pendientes</button></div><div class="table-wrap" id="asMailHistory"></div></div>
       <div class="admin-card whatsapp-cloud-settings">
         <span class="eyebrow">WHATSAPP BUSINESS</span><h2>Envío directo de PDF</h2>
         <p class="office-intro">Configura WhatsApp Business Cloud API para que AS Virtual envíe las cotizaciones PDF como documento adjunto directamente al cliente.</p>
@@ -275,5 +315,5 @@
 </div>
 
 <div class="toast" id="adminToast"></div>
-<script src="config.min.js?v=3.13.11"></script><script src="api.min.js?v=3.13.11"></script><script src="cms-defaults.min.js?v=3.13.11"></script><script src="cpanel.min.js?v=3.13.11"></script>
+<script src="config.min.js?v=3.14.0"></script><script src="api.min.js?v=3.14.0"></script><script src="cms-defaults.min.js?v=3.14.0"></script><script src="cpanel.min.js?v=3.14.0"></script>
 </body></html>
